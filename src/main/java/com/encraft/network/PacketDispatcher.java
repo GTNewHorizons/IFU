@@ -3,7 +3,6 @@ package com.encraft.network;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-import com.encraft.dz.DayNMod;
 import com.encraft.dz.lib.Reference;
 import com.encraft.network.client.SyncPlayerPropsMessage;
 import com.encraft.network.server.OpenGuiMessage;

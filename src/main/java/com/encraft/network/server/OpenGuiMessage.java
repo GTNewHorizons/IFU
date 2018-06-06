@@ -3,8 +3,6 @@ package com.encraft.network.server;
 import com.encraft.dz.DayNMod;
 import com.encraft.network.AbstractMessage.AbstractServerMessage;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;

@@ -1,9 +1,6 @@
 package com.encraft.dz.handlers;
 
 import net.minecraft.entity.player.EntityPlayer;
-import io.netty.buffer.ByteBuf;
-
-import com.encraft.dz.DayNMod;
 
 
 import cpw.mods.fml.client.FMLClientHandler;

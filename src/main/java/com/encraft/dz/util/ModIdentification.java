@@ -2,16 +2,12 @@ package com.encraft.dz.util;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
-import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
 import cpw.mods.fml.common.registry.GameData;
-import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.security.CodeSource;
-import java.security.ProtectionDomain;
-import java.util.HashMap;
 import net.minecraft.item.ItemStack;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.HashMap;
 
 public class ModIdentification
 {

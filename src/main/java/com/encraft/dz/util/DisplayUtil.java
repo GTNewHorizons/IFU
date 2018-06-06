@@ -1,25 +1,11 @@
 package com.encraft.dz.util;
 
 
-import java.awt.Dimension;
+import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.settings.GameSettings;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import org.lwjgl.opengl.GL11;
 
 public class DisplayUtil
 {

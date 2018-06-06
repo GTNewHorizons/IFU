@@ -9,7 +9,6 @@ import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
 
 import com.encraft.dz.DayNMod;

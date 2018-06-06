@@ -1,7 +1,6 @@
 package com.encraft.dz;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -16,7 +15,6 @@ import com.encraft.dz.lib.Reference;
 import com.encraft.dz.network.MessageCheckKeypadCode;
 import com.encraft.dz.network.MessageSetKeypadCode;
 import com.encraft.dz.proxy.CommonProxy;
-import com.encraft.dz.util.FindIDFromHandCommand;
 import com.encraft.network.PacketDispatcher;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -26,7 +24,6 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;

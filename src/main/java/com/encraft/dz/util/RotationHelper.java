@@ -1,8 +1,5 @@
 package com.encraft.dz.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class RotationHelper {
 
 	public static final String[] OldLogBlock = {"minecraft:log"};

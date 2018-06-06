@@ -2,50 +2,29 @@ package com.encraft.dz.items;
 
 
 
-import gregtech.api.GregTech_API;
-import gregtech.api.objects.ItemData;
-import gregtech.api.util.GT_LanguageManager;
-import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.common.GT_UndergroundOil;
-import gregtech.common.blocks.GT_Block_Ores_Abstract;
+import com.encraft.dz.DayNMod;
+import com.encraft.dz.ExtendedPlayer;
+import com.encraft.dz.handlers.ConfigHandler;
+import com.encraft.dz.lib.Reference;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.common.blocks.GT_TileEntity_Ores;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
-
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.oredict.OreDictionary;
 
-import com.encraft.dz.DayNMod;
-import com.encraft.dz.ExtendedPlayer;
-import com.encraft.dz.handlers.ConfigHandler;
-import com.encraft.dz.lib.Reference;
-import com.encraft.dz.util.DisplayUtil;
-import com.encraft.dz.util.ModIdentification;
-
-import cpw.mods.fml.common.registry.GameData;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class ItemOreFinderTool extends Item {
 

@@ -4,15 +4,9 @@ package com.encraft.dz;
 import com.encraft.dz.inventory.InventoryBuildingKit;
 
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.FoodStats;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
