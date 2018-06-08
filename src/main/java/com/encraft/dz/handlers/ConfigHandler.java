@@ -17,7 +17,7 @@ public class ConfigHandler {
 	public static boolean wandSound = true;
 	public static int xzAreaRadius = 4;
 	public static int yAreaRadius = 40;
-	public static  String[] whitelist = {};
+	public static  String[] blacklist = {};
 	
 	
 	
@@ -34,12 +34,12 @@ public class ConfigHandler {
 	private static void loadConfiguration() {
 		
 		xzAreaRadius = cfg.getInt("X Z Area radius", cfg.CATEGORY_GENERAL, xzAreaRadius, 1, 16, " change scanning radius from player");
-		yAreaRadius = cfg.getInt("Y Area radius", cfg.CATEGORY_GENERAL, yAreaRadius, 1, 60, " change scanning radius from player on Y position");
+		yAreaRadius = cfg.getInt("Y Area radius", cfg.CATEGORY_GENERAL, yAreaRadius, 1, 60, " change scanning distance below the player");
 		
-		dmgBar = cfg.getBoolean("Item damage bar",  cfg.CATEGORY_GENERAL, updateCheck, "If true damage bar on item will be show how much ore you find");
-		wandSound = cfg.getBoolean("Sounds",  cfg.CATEGORY_GENERAL, wandSound, "If true Ore finder Will play sounds");
+		dmgBar = cfg.getBoolean("Item damage bar",  cfg.CATEGORY_GENERAL, updateCheck, "If true, damage bar will show you how much ore is below you");
+		wandSound = cfg.getBoolean("Sounds",  cfg.CATEGORY_GENERAL, wandSound, "If true, Ore finder will play sounds");
 		
-		whitelist = cfg.getStringList("Blacklist ", cfg.CATEGORY_GENERAL, whitelist, "List of GT ores that can't be readed by ore Finder. Use block WnlocalizedName f.e. \"gt.blockores.6027\"");
+		blacklist = cfg.getStringList("Blacklist ", cfg.CATEGORY_GENERAL, blacklist, "List of GT ores that can't be readed by ore Finder. Use block unlocalizedName f.e. \"gt.blockores.6027\"");
 		
 		if (cfg.hasChanged()){
 			

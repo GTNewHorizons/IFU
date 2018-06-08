@@ -52,7 +52,7 @@ public class GiuInvBuildingKit extends GuiContainer
 			
 		fontRendererObj.drawString(s, 50, 12, 4210752);
 		
-		String[] blacklisted = cfg.whitelist;
+		String[] blacklisted = cfg.blacklist;
 		for (String ss :blacklisted) {
 			if (ss != null && slotek != null && ss.equals(slotek.getUnlocalizedName())) {
 				fontRendererObj.drawString("! Blacklisted block ore !", 27, ySize - 116, 4210752);

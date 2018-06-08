@@ -31,7 +31,7 @@ public class ItemOreFinderTool extends Item {
 	private ConfigHandler cfg;
 
 	private static Long lastUpdate = Long.valueOf(0L);
-	private static Long millisPerUpdate = Long.valueOf(100L);
+	private static Long millisPerUpdate = Long.valueOf(250L);
 	private static boolean isClient;
 	private static int distanceMax;
 	private static int toFind;
@@ -40,7 +40,7 @@ public class ItemOreFinderTool extends Item {
 	private static String configComment;
 	private static int distancePerLevel;
 
-	private String[] dupa = cfg.whitelist;
+	private String[] dupe = cfg.blacklist;
 	private static IIcon[] iconIndexes;
 	private static int distanceShortest = -1;
 	private static int lastState = 0;
@@ -111,12 +111,13 @@ public class ItemOreFinderTool extends Item {
 		if (ExtendedPlayer.get(Minecraft.getMinecraft().thePlayer).inventorybk.getStackInSlot(0) != null
 				&& inventoryContainsAAD(Minecraft.getMinecraft().thePlayer.inventory) != null){
 
-			toFindStr = ExtendedPlayer.get(Minecraft.getMinecraft().thePlayer).inventorybk.getStackInSlot(0).getUnlocalizedName();	
+			toFindStr = ExtendedPlayer.get(Minecraft.getMinecraft().thePlayer).inventorybk.getStackInSlot(0).getUnlocalizedName();
 
 			if (new Date().getTime() <= lastUpdate.longValue()
 					+ millisPerUpdate.longValue()) {
 				return;
 			}
+            //System.out.println("Starting scan for " + toFindStr);
 			lastUpdate = Long.valueOf(new Date().getTime());
 			distanceShortest = -1;
 
@@ -126,8 +127,6 @@ public class ItemOreFinderTool extends Item {
 			if (!entity.getClass().getSimpleName().equals("EntityClientPlayerMP")) {
 				return;
 			}
-
-
 
 			double cur_x = entity.posX;
 			double cur_y = entity.posY;
@@ -140,7 +139,9 @@ public class ItemOreFinderTool extends Item {
 			int max_x = (int) cur_x + distanceMax;
 			int max_y = (int) cur_y + distanceMax;
 			int max_z = (int) cur_z + distanceMax + 1;
-			for (int z1 = min_z; z1 < max_z; z1++) {
+            boolean keepLooking = true;
+            
+			for (int z1 = min_z; (z1 < max_z) && (keepLooking); z1++) {
 				for (int x1 = min_x; x1 < max_x; x1++) {
 					for (int y1 = min_y; y1 < max_y; y1++) {
 
@@ -148,33 +149,58 @@ public class ItemOreFinderTool extends Item {
 						
 						if (tBlock.getUnlocalizedName().equals(toFindStr)) {
 							found.add(new int[] { x1, y1, z1 });
+                            //System.out.println("Found vanilla item");
+                            if (found.size() > 7 ){
+                                keepLooking = false;
+                            }
 						}
 						if (world.getBlock(x1, y1, z1).getUnlocalizedName().equals("gt.blockores")) {
-							//if (world.getBlock(x1, y1, z1).getMaterial() == Material.rock || world.getBlock(x1, y1, z1) == GregTech_API.sBlockOres1) {
 
 							short tMetaID = (short)world.getBlockMetadata(x1, y1, z1);
 							TileEntity tTileEntity = world.getTileEntity(x1, y1, z1);
 							tMetaID = (short)((GT_TileEntity_Ores) tTileEntity).getMetaData();
-							/*String name = tBlock.getUnlocalizedName() + "." + tMetaID;
+							String name = tBlock.getUnlocalizedName() + "." + tMetaID;
 							if (name.equals(toFindStr)) {
-								for (String s :dupa) {
-									if (s != null && !s.equals(name)) {
+                                boolean blacklisted = false;
+								for (String s : dupe) {
+                                    //System.out.println("Blacklisted ore " + s + " compared to " + name );
+									if (s != null && s.equals(name)) {
+                                        //System.out.println("Ignore, ore is blacklisted");
+                                        // ore is blacklisted, do not report
+                                        blacklisted = true;
+                                    }
+                                    if (!blacklisted ) {
 										found.add(new int[] { x1, y1, z1 });
+                                        //System.out.println("Exact match found");
+                                        if (found.size() > 7) {
+                                            keepLooking = false;
+                                        }
 										break;
 									}
-								}	
-							}*/
+								}	 //Disable whitelist checking for now
+							}
+                            /* Disable crushed detection right now - it isn't working because getDrops is not working properly for GT ores.
+                            // MAybe needs to recurse
+							System.out.println("Gregtech block ore found");
 							ArrayList<ItemStack> drops = tBlock.getDrops(world, x1, y1, z1, tMetaID, 0);
+                            System.out.println( "drops.size() " + drops.size());
 							for (int i = 0; i<drops.size();i++){
+                                System.out.println("Drop : drops.get(i).getUnlocalizedName().toString()" + drops.get(i).getUnlocalizedName().toString() );
 								if ( drops.get(i).getUnlocalizedName().toString().equals(toFindStr)) {
-									for (String s :dupa) {
+                                        System.out.println("Matching drop from ore");
+                                        for (String s :dupa) {
 										if (s != null && !s.equals( drops.get(i).getUnlocalizedName().toString())) {
 											found.add(new int[] { x1, y1, z1 });
+                                            System.out.println("whitelist match");
+                                            if (found.size() > 7) {
+                                                keepLooking = false;
+                                            }
 											break;
 										}
 									}	
 								}
 							}
+							*/
 						}
 					}
 				}
@@ -214,8 +240,9 @@ public class ItemOreFinderTool extends Item {
 			list.add("I want to find: " + toFindStr2 );
 			list.add(toFindStr3 );
 			list.add("Put ore block you want to find in item inventory -");
-			list.add("SHIFT+RIGHT CLICK on ground to open");
-			list.add("debug tool radius X, Z: "+ cfg.xzAreaRadius +" Y: "+cfg.yAreaRadius);
+			list.add("SHIFT+RIGHT CLICK on ground to open inventory");
+            list.add("You can only use 1 finder at a time");
+			list.add("Search radius X, Z: "+ cfg.xzAreaRadius +" Y: "+cfg.yAreaRadius);
 
 		}
 	}
@@ -230,10 +257,11 @@ public class ItemOreFinderTool extends Item {
 			}
 		}
 		else{
+            /*
 			
 			// Only for tests!
 			world.playSoundAtEntity(entityPlayer, "ic2:tools.Treetap", 1.0F, 1.0F);
-		
+
 			Block tBlock = world.getBlock(x, y, z);
 			short tMetaID = (short)world.getBlockMetadata(x, y, z);
 			
@@ -250,6 +278,7 @@ public class ItemOreFinderTool extends Item {
 					System.out.println("drops :" + (i+1) + " " + drops.get(i).getDisplayName());
 				System.out.println(" -----------------   " );
 			}
+*/
 		}
 		return true;
 	}
