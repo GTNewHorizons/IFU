@@ -1,5 +1,6 @@
 package com.encraft.dz;
 
+import com.encraft.dz.handlers.Recipes;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
@@ -78,11 +79,13 @@ public class DayNMod {
     	proxy.registerRenderers();
     	MinecraftForge.EVENT_BUS.register(new DayNModEventHandler());
     	NetworkRegistry.INSTANCE.registerGuiHandler(this, new CommonProxy());
-    	
+
     }
         
     @EventHandler
-    public void postInit(FMLPostInitializationEvent event){}
+    public void postInit(FMLPostInitializationEvent event){
+        new Recipes().run();
+    }
     
 
     
