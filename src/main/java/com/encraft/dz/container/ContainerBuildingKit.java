@@ -23,13 +23,21 @@ public class ContainerBuildingKit extends Container
 		
 		
 		addSlotToContainer(new SlotItemInv(inventoryCustom, 0, 80, 26));
-
+		
 	
 
 		// Add ACTION BAR 
-		for (i = 0; i < 9; ++i) {
+		for (i = 0; i < 9; ++i)
 			addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
-		}
+		
+		/*// Add inventory
+		for (i = 0; i < 9; ++i)
+			addSlotToContainer(new Slot(inventoryPlayer, 8+i, 8+i * 18, 120));
+		for (i = 0; i < 9; ++i)
+			addSlotToContainer(new Slot(inventoryPlayer, 17+i, 8+i * 18, 100));
+		for (i = 0; i < 9; ++i)
+			addSlotToContainer(new Slot(inventoryPlayer, 26+i, 8+i * 18, 80));*/
+		
 	}
 
 	/**
@@ -45,6 +53,8 @@ public class ContainerBuildingKit extends Container
 	 * Basically the same as every other container I make, since I define the same constant indices for all of them 
 	 */
 	public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
+		return null;
+		/*
 		ItemStack itemstack = null;
 		Slot slot = (Slot) this.inventorySlots.get(par2);
 
@@ -55,11 +65,15 @@ public class ContainerBuildingKit extends Container
 			// Either armor slot or custom item slot was clicked
 			if (par2 < INV_START) {
 				// try to place in player inventory / action bar
+				try {
 				if (!this.mergeItemStack(itemstack1, INV_START, HOTBAR_END + 1, true)) {
 					return null;
 				}
 
 				slot.onSlotChange(itemstack1, itemstack);
+				} catch(java.lang.IndexOutOfBoundsException e) {
+					return null;
+				}
 			}
 			// Item is in inventory / hotbar, try to place either in custom or armor slots
 			else {
@@ -70,8 +84,8 @@ public class ContainerBuildingKit extends Container
 					}
 				}
 				
-				else if (par2 >= HOTBAR_START && par2 < HOTBAR_END + 1) {
-					if (!this.mergeItemStack(itemstack1, INV_START, INV_END + 1, false)) {
+				else if (par2 >= 0 && par2 < 36 + 1) {
+					if (!this.mergeItemStack(itemstack1, 0, 36 + 1, false)) {
 						return null;
 					}
 				}
@@ -89,7 +103,8 @@ public class ContainerBuildingKit extends Container
 
 			slot.onPickupFromSlot(player, itemstack1);
 		}
-
 		return itemstack;
+		*/
 	}
+	
 }
