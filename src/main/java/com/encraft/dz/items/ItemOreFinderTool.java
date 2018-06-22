@@ -109,7 +109,7 @@ public class ItemOreFinderTool extends Item {
         return itemstack;
     }
 
-//    @SideOnly(Side.CLIENT)
+    @SideOnly(Side.CLIENT)
     public void onUpdate(ItemStack itemstack, World world, Entity entity, int par4, boolean par5) 
     {
         if (!itemstack.hasTagCompound()) {
