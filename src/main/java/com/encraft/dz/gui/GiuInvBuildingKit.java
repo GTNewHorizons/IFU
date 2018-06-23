@@ -70,3 +70,4 @@ public class GiuInvBuildingKit extends GuiContainer
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 	}
 }
+

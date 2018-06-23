@@ -152,9 +152,11 @@ public class ItemOreFinderTool extends Item {
             } 
             ItemStack searchItem = ExtendedPlayer.get((EntityPlayer) entity).inventorybk.getStackInSlot(0);
             if ( searchItem == null ) {
+                itemstack.setItemDamage(MAX_DAMAGE);
                 return;
             }
             if( inventoryContainsAAD( ((EntityPlayer) entity).inventory ) == null ) {
+                itemstack.setItemDamage(MAX_DAMAGE);
                 return;
             }
 
