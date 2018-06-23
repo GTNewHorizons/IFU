@@ -34,12 +34,11 @@ public class ConfigHandler {
 	private static void loadConfiguration() {
 		
 		xzAreaRadius = cfg.getInt("X Z Area radius", cfg.CATEGORY_GENERAL, xzAreaRadius, 1, 16, " change scanning radius from player");
-		yAreaRadius = cfg.getInt("Y Area radius", cfg.CATEGORY_GENERAL, yAreaRadius, 1, 60, " change scanning distance below the player");
+		yAreaRadius = cfg.getInt("Y Area radius", cfg.CATEGORY_GENERAL, yAreaRadius, 1, 60, " change scanning distance above and below the player");
 		
-		dmgBar = cfg.getBoolean("Item damage bar",  cfg.CATEGORY_GENERAL, updateCheck, "If true, damage bar will show you how much ore is below you");
 		wandSound = cfg.getBoolean("Sounds",  cfg.CATEGORY_GENERAL, wandSound, "If true, Ore finder will play sounds");
 		
-		blacklist = cfg.getStringList("Blacklist ", cfg.CATEGORY_GENERAL, blacklist, "List of GT ores that can't be readed by ore Finder. Use block unlocalizedName f.e. \"gt.blockores.6027\"");
+		blacklist = cfg.getStringList("Blacklist ", cfg.CATEGORY_GENERAL, blacklist, "List of GT ores that can't be readed by ore Finder. Use block unlocalizedName with meta < 1000, f.e. \"gt.blockores.27\"");
 		
 		if (cfg.hasChanged()){
 			
