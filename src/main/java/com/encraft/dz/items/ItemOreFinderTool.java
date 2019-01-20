@@ -59,7 +59,6 @@ public class ItemOreFinderTool extends Item {
 
     private String toFindStr3;
 
-
     public ItemOreFinderTool()
     {
         setUnlocalizedName(Reference.MOD_ID + "_" + "buildingKitItem");
@@ -161,6 +160,16 @@ public class ItemOreFinderTool extends Item {
             }
 
             toFindStr = searchItem.getUnlocalizedName();
+
+            String[] blacklist = cfg.blacklist;
+            for (String ss :blacklist) {
+                if (ss != null && ss.equals(toFindStr)) {
+                    itemstack.setItemDamage(MAX_DAMAGE);
+                    return;
+                }
+            }
+
+
             String splitFind[] = toFindStr.split("\\.");
             if (splitFind[1].equals("blockores")) { // Convert background materials to standard stone
                 short tMetaID = (short) (Integer.parseInt(splitFind[2]) % 1000);
@@ -190,37 +199,6 @@ public class ItemOreFinderTool extends Item {
                             short tMetaID = (short)((GT_TileEntity_Ores) tTileEntity).getMetaData();
                             String name = tBlock.getUnlocalizedName() + "." + (tMetaID % 1000);
                             if (name.equals(toFindStr)) {
-                                boolean blacklisted = false;
-                                for (String s : dupe) {
-                                    //System.out.println("Blacklisted ore " + s + " compared to " + name );
-                                    if (s != null && s.equals(name)) {
-                                        //System.out.println("Ignore, ore is blacklisted");
-                                        // ore is blacklisted, do not report
-                                        blacklisted = true;
-                                    }
-                                }
-                                if (!blacklisted ) {
-                                    found++;
-                                    //System.out.println("Exact match found");
-                                    if (found >= MAX_DAMAGE) { 
-                                        keepLooking = false;
-                                    }
-                                    continue;
-                                }
-                            }
-                        }
-                        
-                        if (tBlock.getUnlocalizedName().equals(toFindStr)) {
-                            boolean blacklisted = false;
-                            for (String s : dupe) {
-                                //System.out.println("Blacklisted ore " + s + " compared to " + name );
-                                if (s != null && s.equals(toFindStr)) {
-                                    //System.out.println("Ignore, ore is blacklisted");
-                                    // ore is blacklisted, do not report
-                                    blacklisted = true;
-                                }
-                            }
-                            if (!blacklisted ) {
                                 found++;
                                 //System.out.println("Exact match found");
                                 if (found >= MAX_DAMAGE) { 
@@ -228,6 +206,15 @@ public class ItemOreFinderTool extends Item {
                                 }
                                 continue;
                             }
+                        }
+                        /* if ((x1 == 0 )&& (z1 == 0)  System.out.println("Comparing " + toFindStr  + " to " + tBlock.getUnlocalizedName() ); */
+                        if (tBlock.getUnlocalizedName().equals(toFindStr)) {
+                            found++;
+                            //System.out.println("Exact match found");
+                            if (found >= MAX_DAMAGE) { 
+                                keepLooking = false;
+                            }
+                            continue;
                         }
                     }
                 }
