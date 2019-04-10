@@ -69,22 +69,6 @@ repositories {
         name "BuildCraft"
         artifactPattern "http://www.mod-buildcraft.com/releases/BuildCraft/[revision]/[module]-[revision]-[classifier].[ext]"
     }
-    ivy {
-        name 'CoFHLib'
-        artifactPattern "http://addons-origin.cursecdn.com/files/${config.cofhlib.cf}/[module]-[revision].[ext]"
-    }
-    ivy {
-        name 'CoFHCore'
-        artifactPattern "http://addons-origin.cursecdn.com/files/${config.cofhcore.cf}/[module]-[revision].[ext]"
-    }
-    ivy {
-        name 'Railcraft'
-        artifactPattern "http://addons-origin.cursecdn.com/files/${config.railcraft.cf}/[module]_[revision].[ext]"
-    }
-	ivy {
-        name 'IC2NuclearControl'
-        artifactPattern "http://addons-origin.cursecdn.com/files/${config.nc.cf}/[module]-[revision].[ext]"
-    }
 }
 
 dependencies {

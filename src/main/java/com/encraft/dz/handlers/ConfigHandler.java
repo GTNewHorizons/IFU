@@ -17,8 +17,8 @@ public class ConfigHandler {
 	public static boolean wandSound = true;
 	public static int xzAreaRadius = 4;
 	public static int yAreaRadius = 40;
-	public static  String[] blacklist = {};
-	
+	public static String[] blacklist = {};
+	public static boolean aEnableEverywhere = false;
 	
 	
 	public static boolean dmgBar = true;
@@ -35,10 +35,10 @@ public class ConfigHandler {
 		
 		xzAreaRadius = cfg.getInt("X Z Area radius", cfg.CATEGORY_GENERAL, xzAreaRadius, 1, 16, " change scanning radius from player");
 		yAreaRadius = cfg.getInt("Y Area radius", cfg.CATEGORY_GENERAL, yAreaRadius, 1, 60, " change scanning distance above and below the player");
-		
+		aEnableEverywhere = cfg.getBoolean("Enable Everywhere",cfg.CATEGORY_GENERAL,false,"If this is set to false, the OreFinder will only work in the Owerworld, Nether and Twilight Forest");
 		wandSound = cfg.getBoolean("Sounds",  cfg.CATEGORY_GENERAL, wandSound, "If true, Ore finder will play sounds");
 		
-		blacklist = cfg.getStringList("Blacklist ", cfg.CATEGORY_GENERAL, blacklist, "List of GT ores that can't be readed by ore Finder. Use block unlocalizedName with meta < 1000, f.e. \"gt.blockores.27\"");
+		blacklist = cfg.getStringList("Blacklist ", cfg.CATEGORY_GENERAL, blacklist, "List blocks that can't be read by ore Finder. Use unlocalizedName.");
 		
 		if (cfg.hasChanged()){
 			

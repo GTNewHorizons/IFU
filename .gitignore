@@ -71,11 +71,9 @@ hs_err_pid*
 #Folders
 
 eclipse/
-gradle/
 .gradle/
 
 *.log
 tmp/
 libsrc/
 out/
-*.bat
