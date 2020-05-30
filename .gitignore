@@ -77,3 +77,4 @@ eclipse/
 tmp/
 libsrc/
 out/
+*.bat
