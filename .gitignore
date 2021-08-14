@@ -3,6 +3,7 @@
 .project
 build/
 /bin
+/run
 
 .settings/
 # Ignore Gradle GUI config

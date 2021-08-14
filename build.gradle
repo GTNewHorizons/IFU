@@ -33,7 +33,7 @@ archivesBaseName = "IFU"
 
 minecraft {
     version = "${config.minecraft.version}-${config.forge.version}"
-    runDir = "eclipse"
+    runDir = "run"
 }
 
 configurations {
@@ -62,40 +62,35 @@ repositories {
         name "BuildCraft"
         artifactPattern "http://www.mod-buildcraft.com/releases/BuildCraft/[revision]/[module]-[revision]-[classifier].[ext]"
     }
-			  maven { // GalacticGreg, YAMCore,..
-			name 'UsrvDE'
-			url "http://jenkins.usrv.eu:8081/nexus/content/repositories/releases/"
-		}
-		  ivy {
-			name 'gtnh_download_source_stupid_underscore_typo'
-			artifactPattern "http://downloads.gtnewhorizons.com/Mods_for_Jenkins/[module]_[revision].[ext]"
-		}
-
-		  ivy {
-			name 'gtnh_download_source'
-			artifactPattern "http://downloads.gtnewhorizons.com/Mods_for_Jenkins/[module]-[revision].[ext]"
-		}	
+    maven { // GalacticGreg, YAMCore,..
+        name 'UsrvDE'
+        url "http://jenkins.usrv.eu:8081/nexus/content/repositories/releases/"
+    }
+    ivy {
+        name 'gtnh_download_source_stupid_underscore_typo'
+        artifactPattern "http://downloads.gtnewhorizons.com/Mods_for_Jenkins/[module]_[revision].[ext]"
+    }
+    ivy {
+        name 'gtnh_download_source'
+        artifactPattern "http://downloads.gtnewhorizons.com/Mods_for_Jenkins/[module]-[revision].[ext]"
+    }
 }
 
 dependencies {
-    provided ("appeng:appliedenergistics2:${config.ae2.version}:dev") {
-        exclude module: '*'
-    }
-    provided "codechicken:CodeChickenLib:${config.minecraft.version}-${config.codechickenlib.version}:dev"
-	provided "codechicken:CodeChickenCore:${config.minecraft.version}-${config.codechickencore.version}:dev"
-    provided "codechicken:NotEnoughItems:${config.minecraft.version}-${config.nei.version}:dev"
-    provided "net.industrial-craft:industrialcraft-2:${config.ic2.version}:dev"
-    provided "net.sengir.forestry:forestry_${config.minecraft.version}:${config.forestry.version}:dev"
-    provided "applecore:AppleCore:${config.applecore.version}:api"
-    provided "com.enderio.core:EnderCore:${config.enderiocore.version}:dev"
-    provided ("com.enderio:EnderIO:${config.enderio.version}:dev") {
-        transitive = false
-    }
-    provided name: 'buildcraft', version: config.buildcraft.version, classifier: "dev", ext: 'jar'
-    provided name: 'CoFHLib', version: config.cofhlib.version, ext: 'jar'
-    provided name: 'CoFHCore', version: config.cofhcore.version, ext: 'jar'
-    provided name: 'Railcraft', version: config.railcraft.version, ext: 'jar'
-    provided name: 'IC2NuclearControl', version: config.nc.version, ext: 'jar'
+    compile "appeng:appliedenergistics2:${config.ae2.version}:dev"
+    compile "codechicken:CodeChickenLib:${config.minecraft.version}-${config.codechickenlib.version}:dev"
+	compile "codechicken:CodeChickenCore:${config.minecraft.version}-${config.codechickencore.version}:dev"
+    compile "codechicken:NotEnoughItems:${config.minecraft.version}-${config.nei.version}:dev"
+    compile "net.industrial-craft:industrialcraft-2:${config.ic2.version}:dev"
+    compile "net.sengir.forestry:forestry_${config.minecraft.version}:${config.forestry.version}:dev"
+    compile "applecore:AppleCore:${config.applecore.version}:api"
+    compile "com.enderio.core:EnderCore:${config.enderiocore.version}:dev"
+    compile "com.enderio:EnderIO:${config.enderio.version}:dev"
+    compile name: 'buildcraft', version: config.buildcraft.version, classifier: "dev", ext: 'jar'
+    compile name: 'CoFHLib', version: config.cofhlib.version, ext: 'jar'
+    compile name: 'CoFHCore', version: config.cofhcore.version, ext: 'jar'
+    compile name: 'Railcraft', version: config.railcraft.version, ext: 'jar'
+    compile name: 'IC2NuclearControl', version: config.nc.version, ext: 'jar'
 }
 
 processResources
@@ -135,5 +130,3 @@ processResources
 
     }
 }
-
-    
