@@ -8,9 +8,9 @@ dependencies {
     compile "applecore:AppleCore:${applecoreVersion}:api"
     compile "com.enderio.core:EnderCore:${enderiocoreVersion}:dev"
     compile "com.enderio:EnderIO:${enderioVersion}:dev"
-    compile name: 'buildcraft', version: buildcraftVersion, classifier: "dev", ext: 'jar'
-    compile name: 'CoFHLib', version: cofhlibVersion, ext: 'jar'
-    compile name: 'CoFHCore', version: cofhcoreVersion, ext: 'jar'
-    compile name: 'Railcraft', version: railcraftVersion, ext: 'jar'
-    compile name: 'IC2NuclearControl', version: ncVersion, ext: 'jar'
+    compile group: "ivy", name: 'buildcraft', version: buildcraftVersion, classifier: "dev", ext: 'jar'
+    compile group: "ivy", name: 'CoFHLib', version: cofhlibVersion, ext: 'jar'
+    compile group: "ivy", name: 'CoFHCore', version: cofhcoreVersion, ext: 'jar'
+    compile group: "ivy", name: 'Railcraft', version: railcraftVersion, ext: 'jar'
+    compile group: "ivy", name: 'IC2NuclearControl', version: ncVersion, ext: 'jar'
 }
