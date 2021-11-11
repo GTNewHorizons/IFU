@@ -1,0 +1,16 @@
+dependencies {
+    compile "appeng:appliedenergistics2:${ae2Version}:dev"
+    compile "codechicken:CodeChickenLib:${minecraftVersion}-${codechickenlibVersion}:dev"
+    compile "codechicken:CodeChickenCore:${minecraftVersion}-${codechickencoreVersion}:dev"
+    compile "codechicken:NotEnoughItems:${minecraftVersion}-${neiVersion}:dev"
+    compile "net.industrial-craft:industrialcraft-2:${ic2Version}:dev"
+    compile "net.sengir.forestry:forestry_${minecraftVersion}:${forestryVersion}:dev"
+    compile "applecore:AppleCore:${applecoreVersion}:api"
+    compile "com.enderio.core:EnderCore:${enderiocoreVersion}:dev"
+    compile "com.enderio:EnderIO:${enderioVersion}:dev"
+    compile name: 'buildcraft', version: buildcraftVersion, classifier: "dev", ext: 'jar'
+    compile name: 'CoFHLib', version: cofhlibVersion, ext: 'jar'
+    compile name: 'CoFHCore', version: cofhcoreVersion, ext: 'jar'
+    compile name: 'Railcraft', version: railcraftVersion, ext: 'jar'
+    compile name: 'IC2NuclearControl', version: ncVersion, ext: 'jar'
+}

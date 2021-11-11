@@ -4,7 +4,7 @@ package com.encraft.dz.items;
 import com.encraft.dz.DayNMod;
 import com.encraft.dz.ExtendedPlayer;
 import com.encraft.dz.handlers.ConfigHandler;
-import com.encraft.dz.lib.Reference;
+import com.encraft.dz.lib.Tags;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.OrePrefixes;
@@ -35,9 +35,9 @@ public class ItemOreFinderTool extends Item {
     private static int found = 0;
 
     public ItemOreFinderTool() {
-        setUnlocalizedName(Reference.MOD_ID + "_" + "buildingKitItem");
+        setUnlocalizedName(Tags.MOD_ID + "_" + "buildingKitItem");
         setMaxStackSize(1);
-        setTextureName(Reference.MOD_ID + ":meter0");
+        setTextureName(Tags.MOD_ID + ":meter0");
         setHasSubtypes(true);
     }
 
@@ -46,7 +46,7 @@ public class ItemOreFinderTool extends Item {
         super.registerIcons(p_94581_1_);
         iconIndexes = new IIcon[5];
         for (int i = 0; i <= 4; i++) {
-            iconIndexes[i] = p_94581_1_.registerIcon(Reference.MOD_ID + ":meter" + i);
+            iconIndexes[i] = p_94581_1_.registerIcon(Tags.MOD_ID + ":meter" + i);
         }
     }
 
