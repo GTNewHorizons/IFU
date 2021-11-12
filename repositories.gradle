@@ -1,33 +1,10 @@
 repositories {
     maven {
-        name = "chickenbones"
-        url = "http://chickenbones.net/maven/"
+        name = "jitpack"
+        url = "https://jitpack.io"
     }
     maven {
-        name = "ic2, forestry"
-        url = "http://maven.ic2.player.to/"
-    }
-    maven { // EnderIO & EnderCore
-        name 'tterrag Repo'
-        url "http://maven.tterrag.com"
-    }
-    maven { // AppleCore
-        url "http://www.ryanliptak.com/maven/"
-    }
-    ivy {
-        name "BuildCraft"
-        artifactPattern "http://www.mod-buildcraft.com/releases/BuildCraft/[revision]/[module]-[revision]-[classifier].[ext]"
-    }
-    maven { // GalacticGreg, YAMCore,..
-        name 'UsrvDE'
-        url "http://jenkins.usrv.eu:8081/nexus/content/repositories/releases/"
-    }
-    ivy {
-        name 'gtnh_download_source_stupid_underscore_typo'
-        artifactPattern "http://downloads.gtnewhorizons.com/Mods_for_Jenkins/[module]_[revision].[ext]"
-    }
-    ivy {
-        name 'gtnh_download_source'
-        artifactPattern "http://downloads.gtnewhorizons.com/Mods_for_Jenkins/[module]-[revision].[ext]"
+        name = "ic2"
+        url = "https://maven.ic2.player.to/"
     }
 }

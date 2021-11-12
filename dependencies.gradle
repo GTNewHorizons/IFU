@@ -1,16 +1,12 @@
 dependencies {
-    compile "appeng:appliedenergistics2:${ae2Version}:dev"
-    compile "codechicken:CodeChickenLib:${minecraftVersion}-${codechickenlibVersion}:dev"
-    compile "codechicken:CodeChickenCore:${minecraftVersion}-${codechickencoreVersion}:dev"
-    compile "codechicken:NotEnoughItems:${minecraftVersion}-${neiVersion}:dev"
-    compile "net.industrial-craft:industrialcraft-2:${ic2Version}:dev"
-    compile "net.sengir.forestry:forestry_${minecraftVersion}:${forestryVersion}:dev"
-    compile "applecore:AppleCore:${applecoreVersion}:api"
-    compile "com.enderio.core:EnderCore:${enderiocoreVersion}:dev"
-    compile "com.enderio:EnderIO:${enderioVersion}:dev"
-    compile group: "ivy", name: 'buildcraft', version: buildcraftVersion, classifier: "dev", ext: 'jar'
-    compile group: "ivy", name: 'CoFHLib', version: cofhlibVersion, ext: 'jar'
-    compile group: "ivy", name: 'CoFHCore', version: cofhcoreVersion, ext: 'jar'
-    compile group: "ivy", name: 'Railcraft', version: railcraftVersion, ext: 'jar'
-    compile group: "ivy", name: 'IC2NuclearControl', version: ncVersion, ext: 'jar'
+    // GT5U and dependencies
+    compile("com.github.GTNewHorizons:GT5-Unofficial:experimental-SNAPSHOT:dev") {
+        transitive = false
+        setChanging(true)
+    }
+    compile("net.industrial-craft:industrialcraft-2:2.2.828-experimental:dev")
+    compile("com.github.GTNewHorizons:StructureLib:1.0.6:deobf")
+    compile("codechicken:CodeChickenLib:1.7.10-1.1.3.140:dev")
+    compile("codechicken:CodeChickenCore:1.7.10-1.0.7.47:dev")
+    compile("codechicken:NotEnoughItems:1.7.10-1.0.5.120:dev")
 }
