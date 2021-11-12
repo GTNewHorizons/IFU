@@ -194,16 +194,12 @@ public class ItemOreFinderTool extends Item {
 
                             if (dataInWorld.mMaterial.mMaterial == data.mMaterial.mMaterial && oreTypes.contains(dataInWorld.mPrefix)) {
                                 found++;
-                                if (found >= MAX_DAMAGE) {
-                                    keepLooking = false;
-                                }
+                                keepLooking = shouldKeepLooking();
                             }
                         } else {
                             if (Item.getIdFromItem(inWorld.getItem()) == id && inWorld.getItemDamage() == searchItem.getItemDamage()) {
                                 found++;
-                                if (found >= MAX_DAMAGE) {
-                                    keepLooking = false;
-                                }
+                                keepLooking = shouldKeepLooking();
                             }
                         }
 
@@ -212,6 +208,10 @@ public class ItemOreFinderTool extends Item {
             }
             itemstack.setItemDamage(MAX_DAMAGE - found);
         }
+    }
+    
+    private boolean shouldKeepLooking() {
+        return found < MAX_DAMAGE;
     }
 
     @SideOnly(Side.CLIENT)
