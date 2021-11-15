@@ -2,7 +2,7 @@ package com.encraft.dz.handlers;
 
 import java.io.File;
 
-import com.encraft.dz.lib.Reference;
+import com.encraft.dz.lib.Tags;
 
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -25,7 +25,7 @@ public class ConfigHandler {
 	
 	public static void init(String configDir){
 		if (cfg == null){
-			File path = new File(configDir +"/" +Reference.MOD_ID + ".cfg");
+			File path = new File(configDir +"/" + Tags.MOD_ID + ".cfg");
 			cfg =  new Configuration(path);
 			loadConfiguration();
 		}
@@ -49,7 +49,7 @@ public class ConfigHandler {
 	
 	@SubscribeEvent
 	public void onConfigChangeEvent(ConfigChangedEvent.OnConfigChangedEvent event){
-		if (event.modID.equalsIgnoreCase(Reference.MOD_ID)){
+		if (event.modID.equalsIgnoreCase(Tags.MOD_ID)){
 			loadConfiguration();
 		}
 	}

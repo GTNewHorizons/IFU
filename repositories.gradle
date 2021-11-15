@@ -1,0 +1,10 @@
+repositories {
+    maven {
+        name = "jitpack"
+        url = "https://jitpack.io"
+    }
+    maven {
+        name = "ic2"
+        url = "https://maven.ic2.player.to/"
+    }
+}

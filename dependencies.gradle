@@ -1,0 +1,12 @@
+dependencies {
+    // GT5U and dependencies
+    compile("com.github.GTNewHorizons:GT5-Unofficial:experimental-SNAPSHOT:dev") {
+        transitive = false
+        setChanging(true)
+    }
+    compile("net.industrial-craft:industrialcraft-2:2.2.828-experimental:dev")
+    compile("com.github.GTNewHorizons:StructureLib:1.0.6:deobf")
+    compile("codechicken:CodeChickenLib:1.7.10-1.1.3.140:dev")
+    compile("codechicken:CodeChickenCore:1.7.10-1.0.7.47:dev")
+    compile("codechicken:NotEnoughItems:1.7.10-1.0.5.120:dev")
+}
