@@ -1,6 +1,9 @@
 repositories {
     maven {
-        // IC2
+        name = "GTNH"
+        url = "http://jenkins.usrv.eu:8081/nexus/content/groups/public/"
+    }
+    maven {
         name = "ic2"
         url = "https://maven.ic2.player.to/"
         metadataSources {
@@ -9,7 +12,10 @@ repositories {
         }
     }
     maven {
-        name = "jitpack"
+        url "https://cursemaven.com"
+    }
+    maven {
+        name = "jitpack.io"
         url = "https://jitpack.io"
     }
 }
