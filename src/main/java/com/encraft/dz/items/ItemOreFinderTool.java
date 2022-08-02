@@ -238,6 +238,11 @@ public class ItemOreFinderTool extends Item {
             list.add("SHIFT+RIGHT CLICK on ground to open inventory");
             list.add("You can only use 1 finder at a time");
             list.add("Search radius X, Z: "+ ConfigHandler.xzAreaRadius +" Y: "+ConfigHandler.yAreaRadius);
+
+            if (!ConfigHandler.aEnableEverywhere) {
+                list.add("** DOES NOT WORK IN SPACE! **");
+                list.add("Overworld, Nether, Twilight Forest only");
+            }
         }
     }
 
