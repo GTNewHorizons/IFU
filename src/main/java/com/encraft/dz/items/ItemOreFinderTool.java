@@ -5,6 +5,8 @@ import com.encraft.dz.DayNMod;
 import com.encraft.dz.ExtendedPlayer;
 import com.encraft.dz.handlers.ConfigHandler;
 import com.encraft.dz.lib.Tags;
+import com.sinthoras.visualprospecting.VisualProspecting_API;
+import com.sinthoras.visualprospecting.database.OreVeinPosition;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.OrePrefixes;
@@ -15,6 +17,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -23,8 +26,10 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ItemOreFinderTool extends Item {
 
@@ -195,6 +200,7 @@ public class ItemOreFinderTool extends Item {
                             if (dataInWorld.mMaterial.mMaterial == data.mMaterial.mMaterial && oreTypes.contains(dataInWorld.mPrefix)) {
                                 found++;
                                 keepLooking = shouldKeepLooking();
+                                checkGtOreFound(world, entity, vanilla, keepLooking, z1, x1, dataInWorld);
                             }
                         } else {
                             if (Item.getIdFromItem(inWorld.getItem()) == id && inWorld.getItemDamage() == searchItem.getItemDamage()) {
@@ -207,6 +213,20 @@ public class ItemOreFinderTool extends Item {
                 }
             }
             itemstack.setItemDamage(MAX_DAMAGE - found);
+        }
+    }
+    private List<OreVeinPosition> listVeinsInProximityContaining(
+        short foundMaterialMetaId, int blocX, int blockZ, World world) {
+        return VisualProspecting_API.LogicalServer.prospectOreVeinsWithinRadius(world.provider.dimensionId, blocX, blockZ, 48).stream()
+            .filter(it -> it.veinType.containsOre(foundMaterialMetaId))
+            .collect(Collectors.toList());
+    }
+    
+    private void checkGtOreFound(World world, Entity entity, boolean vanilla, boolean keepLooking, int z1, int x1, ItemData dataInWorld) {
+        if (!vanilla && !world.isRemote && !keepLooking && entity instanceof EntityPlayer) {
+            short foundMaterialMetaId = (short)dataInWorld.mMaterial.mMaterial.mMetaItemSubID;
+            List<OreVeinPosition> discoveredOreVeins = this.listVeinsInProximityContaining(foundMaterialMetaId, x1, z1, world);
+            VisualProspecting_API.LogicalServer.sendProspectionResultsToClient((EntityPlayerMP)entity, discoveredOreVeins, Collections.emptyList());
         }
     }
     
