@@ -1,30 +1,27 @@
 package com.encraft.dz.items;
 
+import net.minecraft.item.Item;
+
 import com.encraft.dz.DayNMod;
 import com.encraft.dz.lib.Tags;
 import com.encraft.dz.proxy.CommonProxy;
 import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.item.Item;
 
-public class  DayNModItems {
-	
-	
-	public static CommonProxy proxy;
+public class DayNModItems {
+
+    public static CommonProxy proxy;
 
     public static Item buildingKit;
 
-    
-	public static void init()
-    {
+    public static void init() {
 
     }
 
-	
-	public static void load()
-	{
-    	buildingKit = new ItemOreFinderTool().setCreativeTab(DayNMod.dnCVt).setUnlocalizedName(Tags.MOD_ID + "_" + "buildingKit");
-    	GameRegistry.registerItem(buildingKit, buildingKit.getUnlocalizedName().substring(5));
-    
-	}
+    public static void load() {
+        buildingKit = new ItemOreFinderTool().setCreativeTab(DayNMod.dnCVt)
+                .setUnlocalizedName(Tags.MOD_ID + "_" + "buildingKit");
+        GameRegistry.registerItem(buildingKit, buildingKit.getUnlocalizedName().substring(5));
+
+    }
 
 }

@@ -1,17 +1,11 @@
 package com.encraft.dz.items;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import com.encraft.dz.DayNMod;
-import com.encraft.dz.ExtendedPlayer;
-import com.encraft.dz.handlers.ConfigHandler;
-import com.encraft.dz.lib.Tags;
-import com.sinthoras.visualprospecting.VisualProspecting_API;
-import com.sinthoras.visualprospecting.database.OreVeinPosition;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import gregtech.api.enums.OrePrefixes;
-import gregtech.api.objects.ItemData;
-import gregtech.api.util.GT_OreDictUnificator;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -25,11 +19,18 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.encraft.dz.DayNMod;
+import com.encraft.dz.ExtendedPlayer;
+import com.encraft.dz.handlers.ConfigHandler;
+import com.encraft.dz.lib.Tags;
+import com.sinthoras.visualprospecting.VisualProspecting_API;
+import com.sinthoras.visualprospecting.database.OreVeinPosition;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.objects.ItemData;
+import gregtech.api.util.GT_OreDictUnificator;
 
 public class ItemOreFinderTool extends Item {
 
@@ -55,9 +56,7 @@ public class ItemOreFinderTool extends Item {
         }
     }
 
-
-    public boolean canItemEditBlocks()
-    {
+    public boolean canItemEditBlocks() {
         return false;
     }
 
@@ -65,11 +64,11 @@ public class ItemOreFinderTool extends Item {
         itemStack.stackTagCompound = new NBTTagCompound();
     }
 
-    //TODO -----------------------------------------------------------------------------------------------
+    // TODO -----------------------------------------------------------------------------------------------
     public static ItemStack inventoryContainsAAD(InventoryPlayer inventory) {
         ItemStack itemstack = null;
         for (ItemStack s : inventory.mainInventory) {
-            if (s != null && s.getItem() instanceof ItemOreFinderTool ) {
+            if (s != null && s.getItem() instanceof ItemOreFinderTool) {
                 itemstack = s;
                 break;
             }
@@ -77,21 +76,22 @@ public class ItemOreFinderTool extends Item {
         return itemstack;
     }
 
-    public void onUpdate(ItemStack itemstack, World world, Entity entity, int par4, boolean par5) 
-    {
+    public void onUpdate(ItemStack itemstack, World world, Entity entity, int par4, boolean par5) {
         if ((entity == null) || (world == null)) {
             return;
         }
-        if (new Date().getTime() <= lastUpdate.longValue() ) { // Only search for ore blocks occasionally
+        if (new Date().getTime() <= lastUpdate.longValue()) { // Only search for ore blocks occasionally
             return;
         }
         lastUpdate = Long.valueOf(new Date().getTime()) + millisPerUpdate.longValue();
 
-        if(world.isRemote){ //Client side stuff
+        if (world.isRemote) { // Client side stuff
             found = MAX_DAMAGE - itemstack.getItemDamage();
-            if( found < 0 ) { found = 0; }
-            
-            switch( found ) {
+            if (found < 0) {
+                found = 0;
+            }
+
+            switch (found) {
                 case 0:
                     this.itemIcon = iconIndexes[0];
                     break;
@@ -110,30 +110,34 @@ public class ItemOreFinderTool extends Item {
                 case 9:
                     this.itemIcon = iconIndexes[3];
                     break;
-                default:  // 10 or more found
+                default: // 10 or more found
                     this.itemIcon = iconIndexes[4];
                     break;
             }
-            if (found >= (MAX_DAMAGE/2) && ConfigHandler.wandSound) {
-                world.playSound(entity.posX, entity.posY, entity.posZ,"ic2:tools.Treetap", 0.6F, 0.8F,true); //(Minecraft.getMinecraft().thePlayer, "ic2:tools.Treetap", 1.0F, 1.0F);
+            if (found >= (MAX_DAMAGE / 2) && ConfigHandler.wandSound) {
+                world.playSound(entity.posX, entity.posY, entity.posZ, "ic2:tools.Treetap", 0.6F, 0.8F, true); // (Minecraft.getMinecraft().thePlayer,
+                                                                                                               // "ic2:tools.Treetap",
+                                                                                                               // 1.0F,
+                                                                                                               // 1.0F);
             }
-        }
-        else { //Server side stuff
-            if (!ConfigHandler.aEnableEverywhere && world.provider.dimensionId != 0 && world.provider.dimensionId != -1 && !world.provider.getDimensionName().equals("Twilight Forest"))
+        } else { // Server side stuff
+            if (!ConfigHandler.aEnableEverywhere && world.provider.dimensionId != 0
+                    && world.provider.dimensionId != -1
+                    && !world.provider.getDimensionName().equals("Twilight Forest"))
                 return;
 
-            if ( !(entity instanceof EntityPlayer) ) {
+            if (!(entity instanceof EntityPlayer)) {
                 return;
             }
 
             ItemStack searchItem = ExtendedPlayer.get((EntityPlayer) entity).inventorybk.getStackInSlot(0);
 
-            if ( searchItem == null ) {
+            if (searchItem == null) {
                 itemstack.setItemDamage(MAX_DAMAGE);
                 return;
             }
 
-            if( inventoryContainsAAD( ((EntityPlayer) entity).inventory ) == null ) {
+            if (inventoryContainsAAD(((EntityPlayer) entity).inventory) == null) {
                 itemstack.setItemDamage(MAX_DAMAGE);
                 return;
             }
@@ -147,9 +151,9 @@ public class ItemOreFinderTool extends Item {
 
             ItemData data = GT_OreDictUnificator.getAssociation(searchItem);
 
-            boolean vanilla = (data == null || data.mMaterial == null || data.mMaterial.mMaterial==null);
+            boolean vanilla = (data == null || data.mMaterial == null || data.mMaterial.mMaterial == null);
 
-            int id = vanilla ? Item.getIdFromItem(searchItem.getItem()): 0;
+            int id = vanilla ? Item.getIdFromItem(searchItem.getItem()) : 0;
 
             double cur_x = entity.posX;
             double cur_y = entity.posY;
@@ -170,11 +174,13 @@ public class ItemOreFinderTool extends Item {
                     for (int y1 = min_y; (y1 < max_y) && (keepLooking); y1++) {
 
                         Block tBlock = world.getBlock(x1, y1, z1);
-                        int meta = tBlock.getDamageValue(world,x1, y1, z1);
+                        int meta = tBlock.getDamageValue(world, x1, y1, z1);
                         ItemStack inWorld = new ItemStack(tBlock, 1, meta);
                         if (!vanilla) {
                             ItemData dataInWorld = GT_OreDictUnificator.getAssociation(inWorld);
-                            if (dataInWorld == null || dataInWorld.mPrefix == null || dataInWorld.mMaterial == null || dataInWorld.mMaterial.mMaterial == null)
+                            if (dataInWorld == null || dataInWorld.mPrefix == null
+                                    || dataInWorld.mMaterial == null
+                                    || dataInWorld.mMaterial.mMaterial == null)
                                 continue;
 
                             List<OrePrefixes> oreTypes = Arrays.asList(
@@ -189,21 +195,22 @@ public class ItemOreFinderTool extends Item {
                                     OrePrefixes.oreRedgranite,
                                     OrePrefixes.oreRich,
                                     OrePrefixes.oreDense,
-                                    //uncomment this for small ores and/or blocks
-                                    //OrePrefixes.oreSmall,
-                                    //OrePrefixes.block
-                                    //OrePrefixes.block_
+                                    // uncomment this for small ores and/or blocks
+                                    // OrePrefixes.oreSmall,
+                                    // OrePrefixes.block
+                                    // OrePrefixes.block_
                                     OrePrefixes.oreGem,
-                                    OrePrefixes.denseore
-                                    );
+                                    OrePrefixes.denseore);
 
-                            if (dataInWorld.mMaterial.mMaterial == data.mMaterial.mMaterial && oreTypes.contains(dataInWorld.mPrefix)) {
+                            if (dataInWorld.mMaterial.mMaterial == data.mMaterial.mMaterial
+                                    && oreTypes.contains(dataInWorld.mPrefix)) {
                                 found++;
                                 keepLooking = shouldKeepLooking();
                                 checkGtOreFound(world, entity, vanilla, keepLooking, z1, x1, dataInWorld);
                             }
                         } else {
-                            if (Item.getIdFromItem(inWorld.getItem()) == id && inWorld.getItemDamage() == searchItem.getItemDamage()) {
+                            if (Item.getIdFromItem(inWorld.getItem()) == id
+                                    && inWorld.getItemDamage() == searchItem.getItemDamage()) {
                                 found++;
                                 keepLooking = shouldKeepLooking();
                             }
@@ -215,49 +222,53 @@ public class ItemOreFinderTool extends Item {
             itemstack.setItemDamage(MAX_DAMAGE - found);
         }
     }
-    private List<OreVeinPosition> listVeinsInProximityContaining(
-        short foundMaterialMetaId, int blocX, int blockZ, World world) {
-        return VisualProspecting_API.LogicalServer.prospectOreVeinsWithinRadius(world.provider.dimensionId, blocX, blockZ, 48).stream()
-            .filter(it -> it.veinType.containsOre(foundMaterialMetaId))
-            .collect(Collectors.toList());
+
+    private List<OreVeinPosition> listVeinsInProximityContaining(short foundMaterialMetaId, int blocX, int blockZ,
+            World world) {
+        return VisualProspecting_API.LogicalServer
+                .prospectOreVeinsWithinRadius(world.provider.dimensionId, blocX, blockZ, 48).stream()
+                .filter(it -> it.veinType.containsOre(foundMaterialMetaId)).collect(Collectors.toList());
     }
-    
-    private void checkGtOreFound(World world, Entity entity, boolean vanilla, boolean keepLooking, int z1, int x1, ItemData dataInWorld) {
+
+    private void checkGtOreFound(World world, Entity entity, boolean vanilla, boolean keepLooking, int z1, int x1,
+            ItemData dataInWorld) {
         if (!vanilla && !world.isRemote && !keepLooking && entity instanceof EntityPlayer) {
-            short foundMaterialMetaId = (short)dataInWorld.mMaterial.mMaterial.mMetaItemSubID;
-            List<OreVeinPosition> discoveredOreVeins = this.listVeinsInProximityContaining(foundMaterialMetaId, x1, z1, world);
-            VisualProspecting_API.LogicalServer.sendProspectionResultsToClient((EntityPlayerMP)entity, discoveredOreVeins, Collections.emptyList());
+            short foundMaterialMetaId = (short) dataInWorld.mMaterial.mMaterial.mMetaItemSubID;
+            List<OreVeinPosition> discoveredOreVeins = this
+                    .listVeinsInProximityContaining(foundMaterialMetaId, x1, z1, world);
+            VisualProspecting_API.LogicalServer.sendProspectionResultsToClient(
+                    (EntityPlayerMP) entity,
+                    discoveredOreVeins,
+                    Collections.emptyList());
         }
     }
-    
+
     private boolean shouldKeepLooking() {
         return found < MAX_DAMAGE;
     }
 
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) 
-    {
-        if (itemStack.stackTagCompound != null)
-        {
-            String toFindStr2 ="",toFindStr3 ="";
+    public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
+        if (itemStack.stackTagCompound != null) {
+            String toFindStr2 = "", toFindStr3 = "";
 
-            if (ExtendedPlayer.get(Minecraft.getMinecraft().thePlayer).inventorybk.getStackInSlot(0) != null){
-                toFindStr2 = ExtendedPlayer.get(Minecraft.getMinecraft().thePlayer).inventorybk.getStackInSlot(0).getDisplayName();
-                toFindStr3 = ExtendedPlayer.get(Minecraft.getMinecraft().thePlayer).inventorybk.getStackInSlot(0).getUnlocalizedName();
+            if (ExtendedPlayer.get(Minecraft.getMinecraft().thePlayer).inventorybk.getStackInSlot(0) != null) {
+                toFindStr2 = ExtendedPlayer.get(Minecraft.getMinecraft().thePlayer).inventorybk.getStackInSlot(0)
+                        .getDisplayName();
+                toFindStr3 = ExtendedPlayer.get(Minecraft.getMinecraft().thePlayer).inventorybk.getStackInSlot(0)
+                        .getUnlocalizedName();
                 String splitFind[] = toFindStr3.split("\\.");
                 if (splitFind[1].equals("blockores")) {
                     short tMetaID = (short) (Integer.parseInt(splitFind[2]) % 1000);
                     toFindStr3 = splitFind[0] + "." + splitFind[1] + "." + tMetaID;
                 }
             }
-            if (!toFindStr2.isEmpty())
-            list.add("I want to find: " + toFindStr2 );
-            if (!toFindStr3.isEmpty())
-            list.add( toFindStr3 );
+            if (!toFindStr2.isEmpty()) list.add("I want to find: " + toFindStr2);
+            if (!toFindStr3.isEmpty()) list.add(toFindStr3);
             list.add("Put ore block you want to find in item inventory -");
             list.add("SHIFT+RIGHT CLICK on ground to open inventory");
             list.add("You can only use 1 finder at a time");
-            list.add("Search radius X, Z: "+ ConfigHandler.xzAreaRadius +" Y: "+ConfigHandler.yAreaRadius);
+            list.add("Search radius X, Z: " + ConfigHandler.xzAreaRadius + " Y: " + ConfigHandler.yAreaRadius);
 
             if (!ConfigHandler.aEnableEverywhere) {
                 list.add("** DOES NOT WORK IN SPACE! **");
@@ -266,38 +277,31 @@ public class ItemOreFinderTool extends Item {
         }
     }
 
-    public boolean onItemUse(ItemStack itemstack, EntityPlayer entityPlayer, World world, int x, int y, int z, int sciankaKliknieta, float objetosc_x, float pbjetosc_y, float objetosc_z)
-    {    
+    public boolean onItemUse(ItemStack itemstack, EntityPlayer entityPlayer, World world, int x, int y, int z,
+            int sciankaKliknieta, float objetosc_x, float pbjetosc_y, float objetosc_z) {
 
         if (entityPlayer.isSneaking()) {
-            if (!world.isRemote){
+            if (!world.isRemote) {
 
-                entityPlayer.openGui(DayNMod.instance,DayNMod.GUI_CUSTOM_INV1, entityPlayer.worldObj, (int) entityPlayer.posX, (int) entityPlayer.posY, (int) entityPlayer.posZ);
+                entityPlayer.openGui(
+                        DayNMod.instance,
+                        DayNMod.GUI_CUSTOM_INV1,
+                        entityPlayer.worldObj,
+                        (int) entityPlayer.posX,
+                        (int) entityPlayer.posY,
+                        (int) entityPlayer.posZ);
             }
-        }
-        else{
+        } else {
             /*
-            
-            // Only for tests!
-            world.playSoundAtEntity(entityPlayer, "ic2:tools.Treetap", 1.0F, 1.0F);
-
-            Block tBlock = world.getBlock(x, y, z);
-            short tMetaID = (short)world.getBlockMetadata(x, y, z);
-            
-            TileEntity tTileEntity = world.getTileEntity(x, y, z);
-                
-            if(tTileEntity !=null){
-                tMetaID = (short)((GT_TileEntity_Ores) tTileEntity).getMetaData();
-                ArrayList<ItemStack> drops = tBlock.getDrops(world, x, y, z, tMetaID, 0);
-                //    tBlock.getDrops(world, x, y, z, metadata, fortune)
-                String name = tBlock.getDrops(world, x, y, z,tMetaID , 0) + "." + tMetaID;
-                //System.out.println(drops.get(0).getUnlocalizedName());
-                
-                for (int i = 0; i<drops.size();i++)
-                    System.out.println("drops :" + (i+1) + " " + drops.get(i).getDisplayName());
-                System.out.println(" -----------------   " );
-            }
-*/
+             * // Only for tests! world.playSoundAtEntity(entityPlayer, "ic2:tools.Treetap", 1.0F, 1.0F); Block tBlock =
+             * world.getBlock(x, y, z); short tMetaID = (short)world.getBlockMetadata(x, y, z); TileEntity tTileEntity =
+             * world.getTileEntity(x, y, z); if(tTileEntity !=null){ tMetaID = (short)((GT_TileEntity_Ores)
+             * tTileEntity).getMetaData(); ArrayList<ItemStack> drops = tBlock.getDrops(world, x, y, z, tMetaID, 0); //
+             * tBlock.getDrops(world, x, y, z, metadata, fortune) String name = tBlock.getDrops(world, x, y, z,tMetaID ,
+             * 0) + "." + tMetaID; //System.out.println(drops.get(0).getUnlocalizedName()); for (int i = 0;
+             * i<drops.size();i++) System.out.println("drops :" + (i+1) + " " + drops.get(i).getDisplayName());
+             * System.out.println(" -----------------   " ); }
+             */
         }
         return true;
     }

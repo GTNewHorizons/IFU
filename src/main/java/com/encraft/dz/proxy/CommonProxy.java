@@ -8,47 +8,44 @@ import com.encraft.dz.ExtendedPlayer;
 import com.encraft.dz.container.ContainerBuildingKit;
 import com.encraft.dz.gui.GiuInvBuildingKit;
 
-
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 
+public class CommonProxy implements IGuiHandler {
 
-public class CommonProxy implements IGuiHandler
-{
-	
-	public void registerRenderers() {}
-	
-	public void registerTileEntitySpecialRenderer(){}
-	
-	public EntityPlayer getPlayerEntity(MessageContext ctx) {
-		return ctx.getServerHandler().playerEntity;
-	}
-	
-	@Override
-	public Object getServerGuiElement(int guiId, EntityPlayer player, World world, int x, int y, int z) {
-		
-		if (guiId == DayNMod.GUI_CUSTOM_INV1)  {
-				return new ContainerBuildingKit(player, player.inventory, ExtendedPlayer.get(player).inventorybk);
-			}
-			return null;
-	}
+    public void registerRenderers() {}
 
-	@Override
-	public Object getClientGuiElement(int guiId, EntityPlayer player, World world, int x, int y, int z) {
-		
-		if (guiId == DayNMod.GUI_CUSTOM_INV1) {
-			return new GiuInvBuildingKit(player, player.inventory, ExtendedPlayer.get(player).inventorybk);
-		}
-			return null;
-	}
-	
-	public void registerTileEntities(){}
-	
-	public void init(FMLInitializationEvent event){}
-	
-	public int addArmor(String armor){
-		return 0;
-	}
-  
+    public void registerTileEntitySpecialRenderer() {}
+
+    public EntityPlayer getPlayerEntity(MessageContext ctx) {
+        return ctx.getServerHandler().playerEntity;
+    }
+
+    @Override
+    public Object getServerGuiElement(int guiId, EntityPlayer player, World world, int x, int y, int z) {
+
+        if (guiId == DayNMod.GUI_CUSTOM_INV1) {
+            return new ContainerBuildingKit(player, player.inventory, ExtendedPlayer.get(player).inventorybk);
+        }
+        return null;
+    }
+
+    @Override
+    public Object getClientGuiElement(int guiId, EntityPlayer player, World world, int x, int y, int z) {
+
+        if (guiId == DayNMod.GUI_CUSTOM_INV1) {
+            return new GiuInvBuildingKit(player, player.inventory, ExtendedPlayer.get(player).inventorybk);
+        }
+        return null;
+    }
+
+    public void registerTileEntities() {}
+
+    public void init(FMLInitializationEvent event) {}
+
+    public int addArmor(String armor) {
+        return 0;
+    }
+
 }

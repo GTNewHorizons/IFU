@@ -1,6 +1,5 @@
 package com.encraft.dz.proxy;
 
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,38 +16,33 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+public class ClientProxy extends CommonProxy {
 
-public class ClientProxy extends CommonProxy
-{	
-	public static final Map<Item, ModelBiped> armorModels = new HashMap<Item, ModelBiped>();
-	
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerRenderers()
-	{
-		KeyBindings.init();
+    public static final Map<Item, ModelBiped> armorModels = new HashMap<Item, ModelBiped>();
 
-	}
-	
-	public void registerTileEntitySpecialRenderer(){
-		
-	}
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void registerRenderers() {
+        KeyBindings.init();
 
-	@Override
-    public void init(FMLInitializationEvent event)
-    {
-		
-		
-		
     }
-	
-	@Override
-	public EntityPlayer getPlayerEntity(MessageContext ctx) {
-	
-		return (ctx.side.isClient() ? Minecraft.getMinecraft().thePlayer : super.getPlayerEntity(ctx));
-	}
-	
-	public int addArmor(String armor){
-		return RenderingRegistry.addNewArmourRendererPrefix(armor);
-	}
+
+    public void registerTileEntitySpecialRenderer() {
+
+    }
+
+    @Override
+    public void init(FMLInitializationEvent event) {
+
+    }
+
+    @Override
+    public EntityPlayer getPlayerEntity(MessageContext ctx) {
+
+        return (ctx.side.isClient() ? Minecraft.getMinecraft().thePlayer : super.getPlayerEntity(ctx));
+    }
+
+    public int addArmor(String armor) {
+        return RenderingRegistry.addNewArmourRendererPrefix(armor);
+    }
 }
