@@ -7,6 +7,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 import com.encraft.dz.inventory.InventoryBuildingKit;
+
 import gregtech.api.util.GT_Utility;
 
 public class ContainerBuildingKit extends Container {
