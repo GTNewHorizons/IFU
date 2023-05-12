@@ -5,6 +5,7 @@ import net.minecraft.network.PacketBuffer;
 
 import com.encraft.dz.DayNMod;
 import com.encraft.network.AbstractMessage.AbstractServerMessage;
+
 import cpw.mods.fml.relauncher.Side;
 
 public class OpenGuiMessage extends AbstractServerMessage<OpenGuiMessage> {
