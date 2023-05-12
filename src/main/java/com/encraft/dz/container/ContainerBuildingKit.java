@@ -70,4 +70,13 @@ public class ContainerBuildingKit extends Container {
         return null;
     }
 
+    @Override
+    public ItemStack slotClick(int slotId, int clickedButton, int mode, EntityPlayer player) {
+        if (slotId >= 0 && this.getSlot(slotId) != null && (this.getSlot(slotId).getStack() == player.getHeldItem())) {
+            return null;
+        } else {
+            return super.slotClick(slotId, clickedButton, mode, player);
+        }
+    }
+
 }
