@@ -25,7 +25,12 @@ public class ContainerBuildingKit extends Container {
         }
 
         for (i = 0; i < 9; ++i) {
-            this.addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
+            // Lock the slot in which the player is currently holding the wand.
+            if (i == player.inventory.currentItem) {
+                this.addSlotToContainer(new SlotBlockedItemInv(inventoryPlayer, i, 8 + i * 18, 142));
+            } else {
+                this.addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
+            }
         }
     }
 
@@ -75,9 +80,18 @@ public class ContainerBuildingKit extends Container {
     public ItemStack slotClick(int slotId, int clickedButton, int mode, EntityPlayer player) {
         if (slotId >= 0 && this.getSlot(slotId) != null && (this.getSlot(slotId).getStack() == player.getHeldItem())) {
             return null;
-        } else {
-            return super.slotClick(slotId, clickedButton, mode, player);
         }
+
+        // keybind for moving from hotbar slot to hovered slot
+        if (mode == 2 && clickedButton >= 0 && clickedButton < 9) {
+            int hotbarIndex = 1 + (9 * 3) + clickedButton;
+            Slot hotbarSlot = getSlot(hotbarIndex);
+            if (hotbarSlot instanceof SlotBlockedItemInv) {
+                return null;
+            }
+        }
+
+        return super.slotClick(slotId, clickedButton, mode, player);
     }
 
 }
