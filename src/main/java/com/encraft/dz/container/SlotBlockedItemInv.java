@@ -22,6 +22,9 @@ public class SlotBlockedItemInv extends Slot {
     }
 
     @Override
+    public void putStack(ItemStack itemStack) {}
+
+    @Override
     public void onPickupFromSlot(EntityPlayer player, ItemStack itemStack) {}
 
     @Override
