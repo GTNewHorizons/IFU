@@ -66,7 +66,7 @@ public class ContainerBuildingKit extends Container {
             }
             for (int i = 1; i < this.inventorySlots.size(); i++) {
                 Slot toSlot = ((Slot) this.inventorySlots.get(i));
-                if (!canMerge && !toSlot.getHasStack()) {
+                if (!canMerge && toSlot.getStack() == null) {
                     fromSlot.putStack(null);
                     toSlot.putStack(toMove);
                     break;
