@@ -50,24 +50,25 @@ public class ContainerBuildingKit extends Container {
             ((Slot) this.inventorySlots.get(par2)).putStack(toMove);
         } else {
             boolean canMerge = false;
-            ItemStack toMove = ((SlotItemInv) this.inventorySlots.get(0)).getStack();
+            SlotItemInv fromSlot = (SlotItemInv) this.inventorySlots.get(0);
+            ItemStack toMove = fromSlot.getStack();
             if (toMove == null) return null;
             for (int i = 1; i < this.inventorySlots.size(); i++) {
-                if ((GT_Utility.areStacksEqual(
-                        ((SlotItemInv) this.inventorySlots.get(0)).getStack(),
-                        ((Slot) this.inventorySlots.get(i)).getStack())
-                        && ((Slot) this.inventorySlots.get(i)).getStack().stackSize
-                                < ((Slot) this.inventorySlots.get(i)).getStack().getMaxStackSize())) {
-                    ((Slot) this.inventorySlots.get(i)).getStack().stackSize++;
-                    ((SlotItemInv) this.inventorySlots.get(0)).putStack(null);
+                Slot toSlot = (Slot) this.inventorySlots.get(i);
+                ItemStack toPlace = toSlot.getStack();
+
+                if (GT_Utility.areStacksEqual(toMove, toPlace) && toPlace.stackSize < toPlace.getMaxStackSize()) {
+                    toPlace.stackSize++;
+                    fromSlot.putStack(null);
                     canMerge = true;
                     break;
                 }
             }
             for (int i = 1; i < this.inventorySlots.size(); i++) {
-                if (!canMerge && (!((Slot) this.inventorySlots.get(i)).getHasStack())) {
-                    ((SlotItemInv) this.inventorySlots.get(0)).putStack(null);
-                    ((Slot) this.inventorySlots.get(i)).putStack(toMove);
+                Slot toSlot = ((Slot) this.inventorySlots.get(i));
+                if (!canMerge && toSlot.getStack() == null) {
+                    fromSlot.putStack(null);
+                    toSlot.putStack(toMove);
                     break;
                 }
             }
