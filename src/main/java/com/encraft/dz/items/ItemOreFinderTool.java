@@ -17,6 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import com.encraft.dz.DayNMod;
@@ -263,28 +264,32 @@ public class ItemOreFinderTool extends Item {
                     toFindStr3 = splitFind[0] + "." + splitFind[1] + "." + tMetaID;
                 }
             }
-        //  if (!toFindStr2.isEmpty()) list.add("I want to find: " + toFindStr2);
-            if (!toFindStr2.isEmpty()) 
-                StatCollector.translateToLocal("IFU.FindTarget" + toFindStr2);
+            // if (!toFindStr2.isEmpty()) list.add("I want to find: " + toFindStr2);
+            if (!toFindStr2.isEmpty()) list.add(StatCollector.translateToLocal("IFU.FindTarget") + toFindStr2);
             if (!toFindStr3.isEmpty()) list.add(toFindStr3);
-            StatCollector.translateToLocal("IFU.description");
+
+            list.add(StatCollector.translateToLocal("IFU.description1"));
+            list.add(StatCollector.translateToLocal("IFU.description2"));
+            list.add(StatCollector.translateToLocal("IFU.description3"));
+            list.add(
+                    StatCollector.translateToLocalFormatted(
+                            "IFU.SearchRadiusText",
+                            ConfigHandler.xzAreaRadius,
+                            ConfigHandler.yAreaRadius));
 
             if (!ConfigHandler.aEnableEverywhere) {
-                StatCollector.translateToLocal("IFU.disableAtSomewhereWarning");
+                list.add(StatCollector.translateToLocal("IFU.disableAtSomewhereWarning1"));
+                list.add(StatCollector.translateToLocal("IFU.disableAtSomewhereWarning2"));
             }
 
-        /*
-            list.add("Put ore block you want to find in item inventory -");
-            list.add("SHIFT+RIGHT CLICK on ground to open inventory");
-            list.add("You can only use 1 finder at a time");
-            list.add("Search radius X, Z: " + ConfigHandler.xzAreaRadius + " Y: " + ConfigHandler.yAreaRadius);
-
-            if (!ConfigHandler.aEnableEverywhere) {
-                list.add("** DOES NOT WORK IN SPACE! **");
-                list.add("Overworld, Nether, Twilight Forest only");
-            }
+            /*
+             * list.add("Put ore block you want to find in item inventory -");
+             * list.add("SHIFT+RIGHT CLICK on ground to open inventory");
+             * list.add("You can only use 1 finder at a time"); list.add("Search radius X, Z: " + *
+             * ConfigHandler.xzAreaRadius + " " + ConfigHandler.yAreaRadius); if (!ConfigHandler.aEnableEverywhere) {
+             * list.add("** DOES NOT WORK IN SPACE! **"); list.add("Overworld, Nether, Twilight Forest only"); }
+             */
         }
-        */
     }
 
     public boolean onItemUse(ItemStack itemstack, EntityPlayer entityPlayer, World world, int x, int y, int z,
@@ -292,7 +297,6 @@ public class ItemOreFinderTool extends Item {
 
         if (entityPlayer.isSneaking()) {
             if (!world.isRemote) {
-
                 entityPlayer.openGui(
                         DayNMod.instance,
                         DayNMod.GUI_CUSTOM_INV1,
