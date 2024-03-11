@@ -263,8 +263,17 @@ public class ItemOreFinderTool extends Item {
                     toFindStr3 = splitFind[0] + "." + splitFind[1] + "." + tMetaID;
                 }
             }
-            if (!toFindStr2.isEmpty()) list.add("I want to find: " + toFindStr2);
+        //  if (!toFindStr2.isEmpty()) list.add("I want to find: " + toFindStr2);
+            if (!toFindStr2.isEmpty()) 
+                StatCollector.translateToLocal("IFU.FindTarget" + toFindStr2);
             if (!toFindStr3.isEmpty()) list.add(toFindStr3);
+            StatCollector.translateToLocal("IFU.description");
+
+            if (!ConfigHandler.aEnableEverywhere) {
+                StatCollector.translateToLocal("IFU.disableAtSomewhereWarning");
+            }
+
+        /*
             list.add("Put ore block you want to find in item inventory -");
             list.add("SHIFT+RIGHT CLICK on ground to open inventory");
             list.add("You can only use 1 finder at a time");
@@ -275,6 +284,7 @@ public class ItemOreFinderTool extends Item {
                 list.add("Overworld, Nether, Twilight Forest only");
             }
         }
+        */
     }
 
     public boolean onItemUse(ItemStack itemstack, EntityPlayer entityPlayer, World world, int x, int y, int z,
