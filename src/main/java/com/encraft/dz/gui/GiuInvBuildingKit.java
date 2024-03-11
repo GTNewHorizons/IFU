@@ -1,11 +1,11 @@
 package com.encraft.dz.gui;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
@@ -50,23 +50,24 @@ public class GiuInvBuildingKit extends GuiContainer {
         if (slotek != null) {
             co_wnim = slotek.getDisplayName();
         } else {
-            co_wnim = "Empty";
+            co_wnim = StatCollector.translateToLocal("IFU.Empty");
         }
 
-        String s = inventory.hasCustomInventoryName() ? inventory.getInventoryName()
-                : I18n.format(inventory.getInventoryName());
+        String s = StatCollector.translateToLocal(inventory.getInventoryName());
 
-        fontRendererObj.drawString(s, 50, 12, 4210752);
+        int width = fontRendererObj.getStringWidth(s);
+        fontRendererObj.drawString(s, 88 - width / 2, 12, 4210752);
 
         String[] blacklisted = cfg.blacklist;
         for (String ss : blacklisted) {
             if (ss != null && slotek != null && ss.equals(slotek.getUnlocalizedName())) {
-                fontRendererObj.drawString("! Blacklisted block !", 27, ySize - 116, 4210752);
+                fontRendererObj
+                        .drawString(StatCollector.translateToLocal("IFU.BlacklistedBlock"), 27, ySize - 116, 4210752);
                 break;
             }
         }
 
-        fontRendererObj.drawString("Name: " + co_wnim, 10, ySize - 96, 4210752);
+        fontRendererObj.drawString(StatCollector.translateToLocal("IFU.NameTip") + co_wnim, 10, ySize - 96, 4210752);
     }
 
     @Override
