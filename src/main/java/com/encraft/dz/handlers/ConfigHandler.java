@@ -4,7 +4,7 @@ import java.io.File;
 
 import net.minecraftforge.common.config.Configuration;
 
-import com.encraft.dz.lib.Tags;
+import com.encraft.dz.DayNMod;
 
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -24,7 +24,7 @@ public class ConfigHandler {
 
     public static void init(String configDir) {
         if (cfg == null) {
-            File path = new File(configDir + "/" + Tags.MOD_ID + ".cfg");
+            File path = new File(configDir + "/" + DayNMod.MOD_ID + ".cfg");
             cfg = new Configuration(path);
             loadConfiguration();
         }
@@ -68,7 +68,7 @@ public class ConfigHandler {
 
     @SubscribeEvent
     public void onConfigChangeEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (event.modID.equalsIgnoreCase(Tags.MOD_ID)) {
+        if (event.modID.equalsIgnoreCase(DayNMod.MOD_ID)) {
             loadConfiguration();
         }
     }

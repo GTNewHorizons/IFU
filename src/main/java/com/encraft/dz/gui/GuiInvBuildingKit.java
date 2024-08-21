@@ -9,26 +9,26 @@ import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
+import com.encraft.dz.DayNMod;
 import com.encraft.dz.container.ContainerBuildingKit;
 import com.encraft.dz.handlers.ConfigHandler;
 import com.encraft.dz.inventory.InventoryBuildingKit;
-import com.encraft.dz.lib.Tags;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GiuInvBuildingKit extends GuiContainer {
+public class GuiInvBuildingKit extends GuiContainer {
 
     private float xSize_lo;
     private float ySize_lo;
     private static final ResourceLocation iconLocation = new ResourceLocation(
-            Tags.MOD_ID,
+            DayNMod.MOD_ID,
             "textures/gui/guiIngBuildingKit.png");
     private final InventoryBuildingKit inventory;
     private ConfigHandler cfg;
 
-    public GiuInvBuildingKit(EntityPlayer player, InventoryPlayer inventoryPlayer,
+    public GuiInvBuildingKit(EntityPlayer player, InventoryPlayer inventoryPlayer,
             InventoryBuildingKit inventoryCustom) {
         super(new ContainerBuildingKit(player, inventoryPlayer, inventoryCustom));
 

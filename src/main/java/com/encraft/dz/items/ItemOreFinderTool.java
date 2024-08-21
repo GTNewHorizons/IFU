@@ -23,7 +23,6 @@ import net.minecraft.world.World;
 import com.encraft.dz.DayNMod;
 import com.encraft.dz.ExtendedPlayer;
 import com.encraft.dz.handlers.ConfigHandler;
-import com.encraft.dz.lib.Tags;
 import com.sinthoras.visualprospecting.VisualProspecting_API;
 import com.sinthoras.visualprospecting.database.OreVeinPosition;
 
@@ -42,9 +41,9 @@ public class ItemOreFinderTool extends Item {
     private static int found = 0;
 
     public ItemOreFinderTool() {
-        setUnlocalizedName(Tags.MOD_ID + "_" + "buildingKitItem");
+        setUnlocalizedName(DayNMod.MOD_ID + "_" + "buildingKitItem");
         setMaxStackSize(1);
-        setTextureName(Tags.MOD_ID + ":meter0");
+        setTextureName(DayNMod.MOD_ID + ":meter0");
         setHasSubtypes(true);
     }
 
@@ -53,7 +52,7 @@ public class ItemOreFinderTool extends Item {
         super.registerIcons(p_94581_1_);
         iconIndexes = new IIcon[5];
         for (int i = 0; i <= 4; i++) {
-            iconIndexes[i] = p_94581_1_.registerIcon(Tags.MOD_ID + ":meter" + i);
+            iconIndexes[i] = p_94581_1_.registerIcon(DayNMod.MOD_ID + ":meter" + i);
         }
     }
 
@@ -195,13 +194,12 @@ public class ItemOreFinderTool extends Item {
                                     OrePrefixes.oreNetherrack,
                                     OrePrefixes.oreRedgranite,
                                     OrePrefixes.oreRich,
-                                    OrePrefixes.oreDense,
-                                    // uncomment this for small ores and/or blocks
-                                    // OrePrefixes.oreSmall,
-                                    // OrePrefixes.block
-                                    // OrePrefixes.block_
-                                    OrePrefixes.oreGem,
-                                    OrePrefixes.denseore);
+                                    OrePrefixes.oreDense
+                            // uncomment this for small ores and/or blocks
+                            // OrePrefixes.oreSmall,
+                            // OrePrefixes.block
+                            // OrePrefixes.block_
+                            );
 
                             if (dataInWorld.mMaterial.mMaterial == data.mMaterial.mMaterial
                                     && oreTypes.contains(dataInWorld.mPrefix)) {
