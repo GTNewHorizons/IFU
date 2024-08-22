@@ -6,7 +6,7 @@ import net.minecraft.world.World;
 import com.encraft.dz.DayNMod;
 import com.encraft.dz.ExtendedPlayer;
 import com.encraft.dz.container.ContainerBuildingKit;
-import com.encraft.dz.gui.GiuInvBuildingKit;
+import com.encraft.dz.gui.GuiInvBuildingKit;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.network.IGuiHandler;
@@ -35,7 +35,7 @@ public class CommonProxy implements IGuiHandler {
     public Object getClientGuiElement(int guiId, EntityPlayer player, World world, int x, int y, int z) {
 
         if (guiId == DayNMod.GUI_CUSTOM_INV1) {
-            return new GiuInvBuildingKit(player, player.inventory, ExtendedPlayer.get(player).inventorybk);
+            return new GuiInvBuildingKit(player, player.inventory, ExtendedPlayer.get(player).inventorybk);
         }
         return null;
     }

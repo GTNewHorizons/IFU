@@ -18,10 +18,12 @@ import cpw.mods.fml.common.network.*;
 import cpw.mods.fml.common.network.simpleimpl.*;
 import cpw.mods.fml.relauncher.*;
 
-@Mod(modid = Tags.MOD_ID, name = Tags.MOD_NAME, version = Tags.MOD_VER)
+@Mod(modid = DayNMod.MOD_ID, name = "I Will Find You", version = Tags.MOD_VER)
 public class DayNMod {
 
-    @Mod.Instance(Tags.MOD_ID)
+    public static final String MOD_ID = "ifu";
+
+    @Mod.Instance(MOD_ID)
     public static DayNMod instance;
 
     @SidedProxy(clientSide = "com.encraft.dz.proxy.ClientProxy", serverSide = "com.encraft.dz.proxy.CommonProxy")

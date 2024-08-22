@@ -3,7 +3,7 @@ package com.encraft.network;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-import com.encraft.dz.lib.Tags;
+import com.encraft.dz.DayNMod;
 import com.encraft.network.client.SyncPlayerPropsMessage;
 import com.encraft.network.server.OpenGuiMessage;
 
@@ -22,7 +22,7 @@ public class PacketDispatcher {
      * The SimpleNetworkWrapper instance is used both to register and send packets. Since I will be adding wrapper
      * methods, this field is private, but you should make it public if you plan on using it directly.
      */
-    private static final SimpleNetworkWrapper dispatcher = NetworkRegistry.INSTANCE.newSimpleChannel(Tags.MOD_ID);
+    private static final SimpleNetworkWrapper dispatcher = NetworkRegistry.INSTANCE.newSimpleChannel(DayNMod.MOD_ID);
 
     /**
      * Call this during pre-init or loading and register all of your packets (messages) here
