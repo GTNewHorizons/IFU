@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 
 import com.encraft.dz.inventory.InventoryBuildingKit;
 
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTUtility;
 
 public class ContainerBuildingKit extends Container {
 
@@ -57,7 +57,7 @@ public class ContainerBuildingKit extends Container {
                 Slot toSlot = (Slot) this.inventorySlots.get(i);
                 ItemStack toPlace = toSlot.getStack();
 
-                if (GT_Utility.areStacksEqual(toMove, toPlace) && toPlace.stackSize < toPlace.getMaxStackSize()) {
+                if (GTUtility.areStacksEqual(toMove, toPlace) && toPlace.stackSize < toPlace.getMaxStackSize()) {
                     toPlace.stackSize++;
                     fromSlot.putStack(null);
                     canMerge = true;

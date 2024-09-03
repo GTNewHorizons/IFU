@@ -30,7 +30,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.objects.ItemData;
-import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GTOreDictUnificator;
 
 public class ItemOreFinderTool extends Item {
 
@@ -149,7 +149,7 @@ public class ItemOreFinderTool extends Item {
                 }
             }
 
-            ItemData data = GT_OreDictUnificator.getAssociation(searchItem);
+            ItemData data = GTOreDictUnificator.getAssociation(searchItem);
 
             boolean vanilla = (data == null || data.mMaterial == null || data.mMaterial.mMaterial == null);
 
@@ -177,7 +177,7 @@ public class ItemOreFinderTool extends Item {
                         int meta = tBlock.getDamageValue(world, x1, y1, z1);
                         ItemStack inWorld = new ItemStack(tBlock, 1, meta);
                         if (!vanilla) {
-                            ItemData dataInWorld = GT_OreDictUnificator.getAssociation(inWorld);
+                            ItemData dataInWorld = GTOreDictUnificator.getAssociation(inWorld);
                             if (dataInWorld == null || dataInWorld.mPrefix == null
                                     || dataInWorld.mMaterial == null
                                     || dataInWorld.mMaterial.mMaterial == null)
