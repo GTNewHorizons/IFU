@@ -1,0 +1,12 @@
+item.ifu_buildingKit.name=Wünschelrute
+itemGroup.DayNModTools=IFU
+IFU.FindTarget=Was ich finden will:
+IFU.description1=Leg den Erzblock, den du finden willst, in das Iteminventar -"
+IFU.description2=STRG+RECHTSKLICK auf den Boden, um das Inventar zu öffnen
+IFU.description3=Du kannst nur eine Wünschelrute gleichzeitig verwenden
+IFU.SearchRadiusText=Suchradius X, Z: %s Y: %s
+IFU.disableAtSomewhereWarning1=** FUNKTIONIERT NICHT IM WELTRAUM! **
+IFU.disableAtSomewhereWarning2=Nur in der Oberwelt, im Nether, und im Twilight Forest
+IFU.BlacklistedBlock=! Block ist gesperrt !
+IFU.NameTip=Name:
+IFU.Empty=Leer
