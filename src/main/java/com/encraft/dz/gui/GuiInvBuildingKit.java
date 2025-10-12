@@ -16,6 +16,7 @@ import com.encraft.dz.inventory.InventoryBuildingKit;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gregtech.api.util.GTUtility;
 
 @SideOnly(Side.CLIENT)
 public class GuiInvBuildingKit extends GuiContainer {
@@ -61,13 +62,12 @@ public class GuiInvBuildingKit extends GuiContainer {
         String[] blacklisted = cfg.blacklist;
         for (String ss : blacklisted) {
             if (ss != null && slotek != null && ss.equals(slotek.getUnlocalizedName())) {
-                fontRendererObj
-                        .drawString(StatCollector.translateToLocal("IFU.BlacklistedBlock"), 27, ySize - 116, 4210752);
+                fontRendererObj.drawString(GTUtility.translate("IFU.BlacklistedBlock"), 27, ySize - 116, 4210752);
                 break;
             }
         }
 
-        fontRendererObj.drawString(StatCollector.translateToLocal("IFU.NameTip") + co_wnim, 10, ySize - 96, 4210752);
+        fontRendererObj.drawString(GTUtility.translate("IFU.NameTip", co_wnim), 10, ySize - 96, 4210752);
     }
 
     @Override
