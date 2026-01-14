@@ -1,4 +1,5 @@
 item.ifu_buildingKit.name=寻矿魔杖
+item.ifu_buildingKit.name=寻矿魔杖
 itemGroup.DayNModTools=寻矿魔杖
 IFU.FindTarget=正在寻找： %s
 IFU.description1=在物品格中放入你要寻找的矿石方块
