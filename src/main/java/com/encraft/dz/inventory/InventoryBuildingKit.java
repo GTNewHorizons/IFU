@@ -74,7 +74,7 @@ public class InventoryBuildingKit implements IInventory {
 
     @Override
     public String getInventoryName() {
-        return "item.ifu_buildingKit.name";
+        return "gui.ifu_buildingKit.title";
     }
 
     @Override
