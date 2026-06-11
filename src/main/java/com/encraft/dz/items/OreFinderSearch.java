@@ -3,9 +3,11 @@ package com.encraft.dz.items;
 import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 
 import com.encraft.dz.handlers.ConfigHandler;
 import com.github.bsideup.jabel.Desugar;
@@ -106,15 +108,23 @@ public final class OreFinderSearch {
 
         for (int z = minZ; z < maxZ; z++) {
             for (int x = minX; x < maxX; x++) {
+                Chunk chunk = world.getChunkFromBlockCoords(x, z);
+                int lx = x & 15;
+                int lz = z & 15;
+
                 for (int y = minY; y < maxY; y++) {
+                    Block block = (y >= 0 && y < 256) ? chunk.getBlock(lx, y, lz) : Blocks.air;
+
+                    if (block == Blocks.air) continue;
+
                     if (allowBlock != null) {
                         // Allow-listed block search: match the exact block, and the metadata unless wildcard.
-                        if (world.getBlock(x, y, z) == allowBlock
-                                && (allowMeta == ANY_META || world.getBlockMetadata(x, y, z) == allowMeta)) {
+                        if (block == allowBlock
+                                && (allowMeta == ANY_META || chunk.getBlockMetadata(lx, y, lz) == allowMeta)) {
                             found++;
                         }
                     } else {
-                        IOreMaterial mat = matchedOre(world, x, y, z, materials);
+                        IOreMaterial mat = matchedOre(block, chunk.getBlockMetadata(lx, y, lz), materials);
                         if (mat != null) {
                             found++;
                             oreMaterial = mat;
@@ -131,9 +141,8 @@ public final class OreFinderSearch {
         return new AreaScan(found, oreMaterial);
     }
 
-    private static IOreMaterial matchedOre(World world, int x, int y, int z,
-            ReferenceOpenHashSet<IOreMaterial> materials) {
-        try (OreInfo<IOreMaterial> info = OreManager.getOreInfo(world, x, y, z)) {
+    private static IOreMaterial matchedOre(Block block, int meta, ReferenceOpenHashSet<IOreMaterial> materials) {
+        try (OreInfo<IOreMaterial> info = OreManager.getOreInfo(block, meta)) {
             if (info != null && info.isNatural && !info.isSmall && materials.contains(info.material)) {
                 return info.material;
             }
