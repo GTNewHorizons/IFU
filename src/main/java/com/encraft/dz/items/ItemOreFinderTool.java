@@ -144,8 +144,16 @@ public class ItemOreFinderTool extends Item {
 
             HashSet<String> materials = new HashSet<>();
 
-            for (var oredict : OrePrefixes.detectPrefix(searchItem)) {
-                materials.add(oredict.material);
+            IOreMaterial searchMaterial = OreManager.getMaterial(searchItem);
+            if (searchMaterial != null) {
+                materials.add(searchMaterial.getInternalName());
+            } else {
+                for (var oredict : OrePrefixes.detectPrefix(searchItem)) {
+                    IOreMaterial mat = IOreMaterial.findMaterial(oredict.material);
+                    if (mat != null) {
+                        materials.add(mat.getInternalName());
+                    }
+                }
             }
 
             int cur_x = MathHelper.floor_double(entity.posX);
