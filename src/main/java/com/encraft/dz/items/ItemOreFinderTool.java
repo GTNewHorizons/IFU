@@ -344,18 +344,51 @@ public class ItemOreFinderTool extends Item {
                         (int) entityPlayer.posY,
                         (int) entityPlayer.posZ);
             }
-        } else {
-            /*
-             * // Only for tests! world.playSoundAtEntity(entityPlayer, "ic2:tools.Treetap", 1.0F, 1.0F); Block tBlock =
-             * world.getBlock(x, y, z); short tMetaID = (short)world.getBlockMetadata(x, y, z); TileEntity tTileEntity =
-             * world.getTileEntity(x, y, z); if(tTileEntity !=null){ tMetaID = (short)((GT_TileEntity_Ores)
-             * tTileEntity).getMetaData(); ArrayList<ItemStack> drops = tBlock.getDrops(world, x, y, z, tMetaID, 0); //
-             * tBlock.getDrops(world, x, y, z, metadata, fortune) String name = tBlock.getDrops(world, x, y, z,tMetaID ,
-             * 0) + "." + tMetaID; //System.out.println(drops.get(0).getUnlocalizedName()); for (int i = 0;
-             * i<drops.size();i++) System.out.println("drops :" + (i+1) + " " + drops.get(i).getDisplayName());
-             * System.out.println(" -----------------   " ); }
-             */
+        } else if (ConfigHandler.debugBlockInfo && !world.isRemote) {
+            printBlockDebug(world, entityPlayer, x, y, z);
         }
         return true;
+    }
+
+    /**
+     * Diagnostic helper (enabled by {@link ConfigHandler#debugBlockInfo}): right-clicking a block reports, in chat, its
+     * registry name and metadata, whether it's a recognized ore (with material and the natural/small flags the wand
+     * matches on), and what it drops. Handy for understanding why an ore does or doesn't match and for finding the
+     * registry names to put in {@link ConfigHandler#allowlist}.
+     */
+    private static void printBlockDebug(World world, EntityPlayer player, int x, int y, int z) {
+        Block block = world.getBlock(x, y, z);
+        int meta = world.getBlockMetadata(x, y, z);
+
+        GTUtility.sendChatToPlayer(
+                player,
+                "[OreFinder] Block: " + Block.blockRegistry.getNameForObject(block) + " meta=" + meta);
+
+        try (OreInfo<IOreMaterial> info = OreManager.getOreInfo(world, x, y, z)) {
+            if (info != null) {
+                GTUtility.sendChatToPlayer(
+                        player,
+                        "[OreFinder] Ore material: " + info.material.getInternalName()
+                                + " (stone="
+                                + info.stoneType
+                                + ", natural="
+                                + info.isNatural
+                                + ", small="
+                                + info.isSmall
+                                + ")");
+            } else {
+                GTUtility.sendChatToPlayer(player, "[OreFinder] Not a recognised ore block");
+            }
+        }
+
+        List<ItemStack> drops = block.getDrops(world, x, y, z, meta, 0);
+        if (drops.isEmpty()) {
+            GTUtility.sendChatToPlayer(player, "[OreFinder] Drops: none");
+        } else {
+            for (ItemStack drop : drops) {
+                GTUtility
+                        .sendChatToPlayer(player, "[OreFinder] Drop: " + drop.stackSize + "x " + drop.getDisplayName());
+            }
+        }
     }
 }

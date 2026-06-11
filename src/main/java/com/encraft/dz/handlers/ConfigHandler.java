@@ -20,6 +20,7 @@ public class ConfigHandler {
     public static String[] blacklist = {};
     public static String[] allowlist = {};
     public static boolean aEnableEverywhere = false;
+    public static boolean debugBlockInfo = false;
 
     public static boolean dmgBar = true;
 
@@ -67,6 +68,14 @@ public class ConfigHandler {
                 "Extra blocks allower for Ore Finder that aren't registered as ores. "
                         + "Use the block registry name with an optional metadata suffix: "
                         + "\"modid:block\" matches any metadata, \"modid:block:2\" matches only this one.");
+
+        debugBlockInfo = cfg.getBoolean(
+                "Debug block info",
+                cfg.CATEGORY_GENERAL,
+                false,
+                "If true, right-clicking a block with the Ore Finder prints its registry name, metadata, ore "
+                        + "material/flags and drops to chat. Useful for diagnosing ore matching and for finding the "
+                        + "registry names to put in the Allowlist.");
 
         if (cfg.hasChanged()) {
 
