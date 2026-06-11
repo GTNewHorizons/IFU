@@ -46,18 +46,4 @@ public class OpenGuiMessage extends AbstractServerMessage<OpenGuiMessage> {
                 (int) player.posY,
                 (int) player.posZ);
     }
-
-    /**
-     *
-     * 'VANILLA' VERSION of the Message Handler Straight implementation without any of my personal 'improvements' :P
-     *
-     */
-    /*
-     * public static class Handler implements IMessageHandler<OpenGuiMessage, IMessage> {
-     * @Override public IMessage onMessage(OpenGuiMessage message, MessageContext ctx) { // You could use
-     * ctx.getServerHandler().playerEntity directly, but using the // the proxy method everywhere keeps you safe from
-     * mundane mistakes EntityPlayer player = TutorialMain.proxy.getPlayerEntity(ctx); // because we sent the gui's id
-     * with the packet, we can handle all cases with one line: player.openGui(TutorialMain.instance, message.id,
-     * player.worldObj, (int) player.posX, (int) player.posY, (int) player.posZ); return null; } }
-     */
 }

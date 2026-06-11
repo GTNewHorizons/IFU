@@ -21,8 +21,6 @@ import gregtech.api.util.GTUtility;
 @SideOnly(Side.CLIENT)
 public class GuiInvBuildingKit extends GuiContainer {
 
-    private float xSize_lo;
-    private float ySize_lo;
     private static final ResourceLocation iconLocation = new ResourceLocation(
             DayNMod.MOD_ID,
             "textures/gui/guiIngBuildingKit.png");
@@ -33,13 +31,6 @@ public class GuiInvBuildingKit extends GuiContainer {
         super(new ContainerBuildingKit(player, inventoryPlayer, inventoryCustom));
 
         this.inventory = inventoryCustom;
-    }
-
-    @Override
-    public void drawScreen(int mouseX, int mouseY, float f) {
-        super.drawScreen(mouseX, mouseY, f);
-        xSize_lo = mouseX;
-        ySize_lo = mouseY;
     }
 
     @Override

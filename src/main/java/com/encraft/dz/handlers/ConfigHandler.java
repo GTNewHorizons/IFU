@@ -13,7 +13,6 @@ public class ConfigHandler {
 
     public static Configuration cfg;
 
-    public static boolean updateCheck = true;
     public static boolean wandSound = true;
     public static int xzAreaRadius = 4;
     public static int yAreaRadius = 40;
@@ -22,8 +21,6 @@ public class ConfigHandler {
     public static String[] allowlist = {};
     public static boolean aEnableEverywhere = false;
     public static boolean debugBlockInfo = false;
-
-    public static boolean dmgBar = true;
 
     public static void init(String configDir) {
         if (cfg == null) {
@@ -98,10 +95,6 @@ public class ConfigHandler {
         if (event.modID.equalsIgnoreCase(DayNMod.MOD_ID)) {
             loadConfiguration();
         }
-    }
-
-    public static Configuration getConfiguration() {
-        return cfg;
     }
 
 }

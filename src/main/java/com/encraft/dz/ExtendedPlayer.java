@@ -77,13 +77,6 @@ public class ExtendedPlayer implements IExtendedEntityProperties {
         inventorybk.readFromNBT(properties);
     }
 
-    public void onUpdate() {
-        // only want to update the timer on the server:
-        if (!player.worldObj.isRemote) {
-
-        }
-    }
-
     @Override
     public void init(Entity entity, World world) {}
 
