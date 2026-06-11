@@ -4,7 +4,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 
 import com.encraft.dz.DayNMod;
 import com.encraft.network.client.SyncPlayerPropsMessage;
-import com.encraft.network.server.OpenGuiMessage;
 
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -29,9 +28,6 @@ public class PacketDispatcher {
     public static final void registerPackets() {
         // Packets handled on CLIENT
         registerMessage(SyncPlayerPropsMessage.class);
-
-        // Packets handled on SERVER
-        registerMessage(OpenGuiMessage.class);
     }
 
     /**
