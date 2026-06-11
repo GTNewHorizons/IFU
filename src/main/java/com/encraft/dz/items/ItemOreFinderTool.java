@@ -87,7 +87,7 @@ public class ItemOreFinderTool extends Item {
         itemStack.stackTagCompound = new NBTTagCompound();
     }
 
-    // TODO -----------------------------------------------------------------------------------------------
+    // Return the first Ore Finder wand in the player inventory, or null if there are none.
     public static ItemStack inventoryContainsAAD(InventoryPlayer inventory) {
         ItemStack itemstack = null;
         for (ItemStack s : inventory.mainInventory) {
@@ -126,15 +126,17 @@ public class ItemOreFinderTool extends Item {
                 return;
             }
 
+            // We only scan for Ore once if the Ore Finder is in player inventory
+            ItemStack primaryWand = inventoryContainsAAD(player.inventory);
+            if (itemstack != primaryWand) {
+                itemstack.setItemDamage(primaryWand == null ? 0 : primaryWand.getItemDamage());
+                return;
+            }
+
             // The ore stack that's in the wand
             ItemStack searchItem = ExtendedPlayer.get(player).inventorybk.getStackInSlot(0);
 
             if (searchItem == null) {
-                itemstack.setItemDamage(0);
-                return;
-            }
-
-            if (inventoryContainsAAD(player.inventory) == null) {
                 itemstack.setItemDamage(0);
                 return;
             }
