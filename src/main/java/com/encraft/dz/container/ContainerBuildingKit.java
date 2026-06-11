@@ -40,14 +40,19 @@ public class ContainerBuildingKit extends Container {
 
     public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
         if (par2 != 0) {
-            ItemStack toMove = ((Slot) this.inventorySlots.get(par2)).getStack();
-            if (toMove == null || ((SlotItemInv) this.inventorySlots.get(0)).getHasStack()) return null;
+            Slot fromSlot = this.inventorySlots.get(par2);
+            if (fromSlot instanceof SlotBlockedItemInv) return null;
+
+            SlotItemInv filterSlot = (SlotItemInv) this.inventorySlots.get(0);
+            ItemStack toMove = fromSlot.getStack();
+            if (toMove == null || filterSlot.getHasStack() || !filterSlot.isItemValid(toMove)) return null;
+
             ItemStack toPlace = toMove.copy();
             toPlace.stackSize = 1;
             toMove.stackSize -= 1;
             if (toMove.stackSize < 1) toMove = null;
-            ((SlotItemInv) this.inventorySlots.get(0)).putStack(toPlace);
-            ((Slot) this.inventorySlots.get(par2)).putStack(toMove);
+            filterSlot.putStack(toPlace);
+            fromSlot.putStack(toMove);
         } else {
             boolean canMerge = false;
             SlotItemInv fromSlot = (SlotItemInv) this.inventorySlots.get(0);

@@ -109,8 +109,7 @@ public class InventoryBuildingKit implements IInventory {
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-
-        return stack.getItem() instanceof ItemOreFinderTool;
+        return !(stack.getItem() instanceof ItemOreFinderTool);
     }
 
     public void writeToNBT(NBTTagCompound compound) {
