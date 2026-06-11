@@ -2,6 +2,7 @@ package com.encraft.dz;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
@@ -18,6 +19,12 @@ public class ExtendedPlayer implements IExtendedEntityProperties {
 
     public final InventoryBuildingKit inventorybk = new InventoryBuildingKit();
 
+    private boolean hasLastScan = false;
+    private int lastScanX;
+    private int lastScanY;
+    private int lastScanZ;
+    private ItemStack lastScanFilter;
+
     public ExtendedPlayer(EntityPlayer player) {
         this.player = player;
     }
@@ -33,6 +40,26 @@ public class ExtendedPlayer implements IExtendedEntityProperties {
     public void copy(ExtendedPlayer props) {
 
         inventorybk.copy(props.inventorybk);
+    }
+
+    public boolean isSameScan(int x, int y, int z, ItemStack filter) {
+        return hasLastScan && x == lastScanX
+                && y == lastScanY
+                && z == lastScanZ
+                && ItemStack.areItemStacksEqual(lastScanFilter, filter);
+    }
+
+    public void rememberScan(int x, int y, int z, ItemStack filter) {
+        hasLastScan = true;
+        lastScanX = x;
+        lastScanY = y;
+        lastScanZ = z;
+        lastScanFilter = filter == null ? null : filter.copy();
+    }
+
+    public void clearLastScan() {
+        hasLastScan = false;
+        lastScanFilter = null;
     }
 
     @Override

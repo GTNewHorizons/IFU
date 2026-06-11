@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL11;
 import com.encraft.dz.DayNMod;
 import com.encraft.dz.container.ContainerBuildingKit;
 import com.encraft.dz.inventory.InventoryBuildingKit;
-import com.encraft.dz.items.ItemOreFinderTool;
+import com.encraft.dz.items.OreFinderSearch;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -46,7 +46,7 @@ public class GuiInvBuildingKit extends GuiContainer {
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 
         ItemStack slotek = inventory.getStackInSlot(0);
-        ItemOreFinderTool.MatchTarget target = ItemOreFinderTool.resolveMatch(slotek);
+        OreFinderSearch.MatchTarget target = OreFinderSearch.resolveMatch(slotek);
 
         String title = StatCollector.translateToLocal(inventory.getInventoryName());
         int width = fontRendererObj.getStringWidth(title);
