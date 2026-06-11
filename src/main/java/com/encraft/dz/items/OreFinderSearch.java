@@ -94,10 +94,10 @@ public final class OreFinderSearch {
         int allowMeta = target.meta;
         ReferenceOpenHashSet<IOreMaterial> materials = target.materials;
 
-        int minX = centerX - ConfigHandler.xzAreaRadius - 1;
-        int maxX = centerX + ConfigHandler.xzAreaRadius;
+        int minX = centerX - ConfigHandler.xzAreaRadius;
+        int maxX = centerX + ConfigHandler.xzAreaRadius + 1;
         int minY = centerY - ConfigHandler.yAreaRadius;
-        int maxY = centerY + ConfigHandler.yAreaRadius;
+        int maxY = centerY + ConfigHandler.yAreaRadius + 1;
         int minZ = centerZ - ConfigHandler.xzAreaRadius;
         int maxZ = centerZ + ConfigHandler.xzAreaRadius + 1;
 
