@@ -21,6 +21,7 @@ import net.minecraft.world.World;
 import com.encraft.dz.DayNMod;
 import com.encraft.dz.ExtendedPlayer;
 import com.encraft.dz.handlers.ConfigHandler;
+import com.github.bsideup.jabel.Desugar;
 import com.sinthoras.visualprospecting.VisualProspecting_API;
 import com.sinthoras.visualprospecting.database.OreVeinPosition;
 
@@ -181,57 +182,74 @@ public class ItemOreFinderTool extends Item {
             int cur_y = MathHelper.floor_double(entity.posY);
             int cur_z = MathHelper.floor_double(entity.posZ);
 
-            int min_x = cur_x - ConfigHandler.xzAreaRadius - 1;
-            int min_y = cur_y - ConfigHandler.yAreaRadius;
-            int min_z = cur_z - ConfigHandler.xzAreaRadius;
+            AreaScan scan = scanArea(world, cur_x, cur_y, cur_z, allowBlock, allowMeta, materials);
 
-            int max_x = cur_x + ConfigHandler.xzAreaRadius;
-            int max_y = cur_y + ConfigHandler.yAreaRadius;
-            int max_z = cur_z + ConfigHandler.xzAreaRadius + 1;
+            if (scan.oreMaterial != null) {
+                prospectForVeins(world, player, cur_x, cur_z, scan.oreMaterial);
+            }
 
-            int found = 0;
+            itemstack.setItemDamage(scan.found);
+        }
+    }
 
-            IOreMaterial oreMaterial = null;
+    /**
+     * Scans the area and reports how many matching blocks were found (capped at {@link #MAX_FOUND}). In ore mode the
+     * matched material is reported back so the caller can run vein prospecting; allow-listed block searches leave it
+     * {@code null}.
+     */
+    private static AreaScan scanArea(World world, int centerX, int centerY, int centerZ, Block allowBlock,
+            int allowMeta, ReferenceOpenHashSet<IOreMaterial> materials) {
 
-            outer: for (int z1 = min_z; z1 < max_z; z1++) {
-                for (int x1 = min_x; x1 < max_x; x1++) {
-                    for (int y1 = min_y; y1 < max_y; y1++) {
-                        if (allowBlock != null) {
-                            // Allow-listed block search: match the exact block, and the metadata unless wildcard.
-                            if (world.getBlock(x1, y1, z1) == allowBlock)
-                                if (allowMeta == ANY_META || world.getBlockMetadata(x1, y1, z1) == allowMeta) {
-                                    found++;
+        int minX = centerX - ConfigHandler.xzAreaRadius - 1;
+        int maxX = centerX + ConfigHandler.xzAreaRadius;
+        int minY = centerY - ConfigHandler.yAreaRadius;
+        int maxY = centerY + ConfigHandler.yAreaRadius;
+        int minZ = centerZ - ConfigHandler.xzAreaRadius;
+        int maxZ = centerZ + ConfigHandler.xzAreaRadius + 1;
 
-                                    if (found >= MAX_FOUND) {
-                                        break outer;
-                                    }
-                                }
-                            continue;
+        int found = 0;
+        IOreMaterial oreMaterial = null;
+
+        for (int z = minZ; z < maxZ; z++) {
+            for (int x = minX; x < maxX; x++) {
+                for (int y = minY; y < maxY; y++) {
+                    if (allowBlock != null) {
+                        // Allow-listed block search: match the exact block, and the metadata unless wildcard.
+                        if (world.getBlock(x, y, z) == allowBlock
+                                && (allowMeta == ANY_META || world.getBlockMetadata(x, y, z) == allowMeta)) {
+                            found++;
                         }
-
-                        try (OreInfo<IOreMaterial> info = OreManager.getOreInfo(world, x1, y1, z1)) {
-                            if (info != null && info.isNatural && !info.isSmall) {
-                                if (materials.contains(info.material)) {
-                                    found++;
-
-                                    oreMaterial = info.material;
-
-                                    if (found >= MAX_FOUND) {
-                                        break outer;
-                                    }
-                                }
-                            }
+                    } else {
+                        IOreMaterial mat = matchedOre(world, x, y, z, materials);
+                        if (mat != null) {
+                            found++;
+                            oreMaterial = mat;
                         }
+                    }
+
+                    if (found >= MAX_FOUND) {
+                        return new AreaScan(found, oreMaterial);
                     }
                 }
             }
-
-            if (oreMaterial != null) {
-                prospectForVeins(world, player, cur_x, cur_z, oreMaterial);
-            }
-
-            itemstack.setItemDamage(found);
         }
+
+        return new AreaScan(found, oreMaterial);
+    }
+
+    private static IOreMaterial matchedOre(World world, int x, int y, int z,
+            ReferenceOpenHashSet<IOreMaterial> materials) {
+        try (OreInfo<IOreMaterial> info = OreManager.getOreInfo(world, x, y, z)) {
+            if (info != null && info.isNatural && !info.isSmall && materials.contains(info.material)) {
+                return info.material;
+            }
+        }
+        return null;
+    }
+
+    @Desugar
+    private record AreaScan(int found, IOreMaterial oreMaterial) {
+
     }
 
     /**
