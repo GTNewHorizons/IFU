@@ -18,6 +18,7 @@ public class ConfigHandler {
     public static int xzAreaRadius = 4;
     public static int yAreaRadius = 40;
     public static String[] blacklist = {};
+    public static String[] allowlist = {};
     public static boolean aEnableEverywhere = false;
 
     public static boolean dmgBar = true;
@@ -58,6 +59,14 @@ public class ConfigHandler {
                 cfg.CATEGORY_GENERAL,
                 blacklist,
                 "List blocks that can't be read by ore Finder. Use unlocalizedName.");
+
+        allowlist = cfg.getStringList(
+                "Allowlist",
+                cfg.CATEGORY_GENERAL,
+                allowlist,
+                "Extra blocks allower for Ore Finder that aren't registered as ores. "
+                        + "Use the block registry name with an optional metadata suffix: "
+                        + "\"modid:block\" matches any metadata, \"modid:block:2\" matches only this one.");
 
         if (cfg.hasChanged()) {
 

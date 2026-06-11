@@ -5,12 +5,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
@@ -34,6 +36,8 @@ import gregtech.common.ores.OreManager;
 public class ItemOreFinderTool extends Item {
 
     private static final int MAX_FOUND = 10;
+    private static final int ANY_META = -1;
+    private static final int NO_MATCH = -2;
 
     private static IIcon[] iconIndexes;
 
@@ -142,16 +146,31 @@ public class ItemOreFinderTool extends Item {
                 }
             }
 
+            // If the filter item is in allow-listed entry, the wand looks for that exact block.
+            Block allowBlock = null;
+            int allowMeta = NO_MATCH;
+
+            if (searchItem.getItem() instanceof ItemBlock filterItemBlock) {
+                Block filterBlock = Block.getBlockFromItem(filterItemBlock);
+                int rule = allowlistMatch(filterBlock, filterItemBlock.getMetadata(searchItem.getItemDamage()));
+                if (rule != NO_MATCH) {
+                    allowBlock = filterBlock;
+                    allowMeta = rule;
+                }
+            }
+
             HashSet<String> materials = new HashSet<>();
 
-            IOreMaterial searchMaterial = OreManager.getMaterial(searchItem);
-            if (searchMaterial != null) {
-                materials.add(searchMaterial.getInternalName());
-            } else {
-                for (var oredict : OrePrefixes.detectPrefix(searchItem)) {
-                    IOreMaterial mat = IOreMaterial.findMaterial(oredict.material);
-                    if (mat != null) {
-                        materials.add(mat.getInternalName());
+            if (allowBlock == null) {
+                IOreMaterial searchMaterial = OreManager.getMaterial(searchItem);
+                if (searchMaterial != null) {
+                    materials.add(searchMaterial.getInternalName());
+                } else {
+                    for (var oredict : OrePrefixes.detectPrefix(searchItem)) {
+                        IOreMaterial mat = IOreMaterial.findMaterial(oredict.material);
+                        if (mat != null) {
+                            materials.add(mat.getInternalName());
+                        }
                     }
                 }
             }
@@ -175,6 +194,19 @@ public class ItemOreFinderTool extends Item {
             outer: for (int z1 = min_z; z1 < max_z; z1++) {
                 for (int x1 = min_x; x1 < max_x; x1++) {
                     for (int y1 = min_y; y1 < max_y; y1++) {
+                        if (allowBlock != null) {
+                            // Allow-listed block search: match the exact block, and the metadata unless wildcard.
+                            if (world.getBlock(x1, y1, z1) == allowBlock)
+                                if (allowMeta == ANY_META || world.getBlockMetadata(x1, y1, z1) == allowMeta) {
+                                    found++;
+
+                                    if (found >= MAX_FOUND) {
+                                        break outer;
+                                    }
+                                }
+                            continue;
+                        }
+
                         try (OreInfo<IOreMaterial> info = OreManager.getOreInfo(world, x1, y1, z1)) {
                             if (info != null && info.isNatural && !info.isSmall) {
                                 if (materials.contains(info.material.getInternalName())) {
@@ -198,6 +230,57 @@ public class ItemOreFinderTool extends Item {
 
             itemstack.setItemDamage(found);
         }
+    }
+
+    /**
+     * Checks whether the given block is permitted by {@link ConfigHandler#allowlist}. Entries use the block registry
+     * name with an optional metadata suffix: {@code "modid:block"} matches any metadata, {@code "modid:block:2"}
+     * matches only metadata 2.
+     *
+     * @return the metadata the wand should look for ({@link #ANY_META} for wildcard entries), or {@link #NO_MATCH} if
+     *         the block isn't allow-listed.
+     */
+    private static int allowlistMatch(Block block, int meta) {
+        if (block == null) {
+            return NO_MATCH;
+        }
+
+        for (String entry : ConfigHandler.allowlist) {
+            if (entry == null) {
+                continue;
+            }
+
+            entry = entry.trim();
+            if (entry.isEmpty()) {
+                continue;
+            }
+
+            String name = entry;
+            int entryMeta = ANY_META;
+
+            // A registry name already contains one ':' (modid:block); a second ':' introduces a metadata suffix.
+            int lastColon = entry.lastIndexOf(':');
+            if (lastColon > 0 && lastColon != entry.indexOf(':')) {
+                try {
+                    entryMeta = Integer.parseInt(entry.substring(lastColon + 1));
+                    name = entry.substring(0, lastColon);
+                } catch (NumberFormatException e) {
+                    // Trailing token wasn't a number, so treat the whole entry as the registry name.
+                    entryMeta = ANY_META;
+                    name = entry;
+                }
+            }
+
+            if (Block.getBlockFromName(name) != block) {
+                continue;
+            }
+
+            if (entryMeta == ANY_META || entryMeta == meta) {
+                return entryMeta;
+            }
+        }
+
+        return NO_MATCH;
     }
 
     private void prospectForVeins(World world, EntityPlayerMP player, int x1, int z1, IOreMaterial ore) {
