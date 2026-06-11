@@ -17,7 +17,8 @@ public class ConfigHandler {
     public static boolean wandSound = true;
     public static int xzAreaRadius = 4;
     public static int yAreaRadius = 40;
-    public static String[] blacklist = {};
+    public static String[] blocklist = {};
+    public static String[] materialBlocklist = {};
     public static String[] allowlist = {};
     public static boolean aEnableEverywhere = false;
     public static boolean debugBlockInfo = false;
@@ -55,27 +56,35 @@ public class ConfigHandler {
                 "If this is set to false, the OreFinder will only work in the Owerworld, Nether and Twilight Forest");
         wandSound = cfg.getBoolean("Sounds", cfg.CATEGORY_GENERAL, wandSound, "If true, Ore finder will play sounds");
 
-        blacklist = cfg.getStringList(
-                "Blacklist ",
+        blocklist = cfg.getStringList(
+                "Blocklist",
                 cfg.CATEGORY_GENERAL,
-                blacklist,
-                "List blocks that can't be read by ore Finder. Use unlocalizedName.");
+                blocklist,
+                "Blocks the Ore Finder must never search for, that it would otherwise match on its own. "
+                        + "Use the block Item ID, same rules as Allowlist");
+
+        materialBlocklist = cfg.getStringList(
+                "Material Blocklist",
+                cfg.CATEGORY_GENERAL,
+                materialBlocklist,
+                "Ore materials the Ore Finder must never search for. "
+                        + "Use the material name printed by the Debug block info option, for example: "
+                        + "\"Gold\" or \"MeteoricIron\".");
 
         allowlist = cfg.getStringList(
                 "Allowlist",
                 cfg.CATEGORY_GENERAL,
                 allowlist,
-                "Extra blocks allower for Ore Finder that aren't registered as ores. "
-                        + "Use the block registry name with an optional metadata suffix: "
-                        + "\"modid:block\" matches any metadata, \"modid:block:2\" matches only this one.");
+                "Extra non-ore blocks allowed by Ore Finder. "
+                        + "Use the block Item ID with an optional metadata suffix: "
+                        + "\"minecraft:cobblestone\" matches any metadata, \"gregtech:gt.blockores2:307\" matches that specific one");
 
         debugBlockInfo = cfg.getBoolean(
                 "Debug block info",
                 cfg.CATEGORY_GENERAL,
                 false,
-                "If true, right-clicking a block with the Ore Finder prints its registry name, metadata, ore "
-                        + "material/flags and drops to chat. Useful for diagnosing ore matching and for finding the "
-                        + "registry names to put in the Allowlist.");
+                "If true, right-clicking a block with the Ore Finder prints its name, metadata, ore material/flags to chat. "
+                        + "Useful for diagnosing ore matching and for finding what to put in an Allow/Block list");
 
         if (cfg.hasChanged()) {
 

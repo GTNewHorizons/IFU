@@ -14,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -127,62 +128,26 @@ public class ItemOreFinderTool extends Item {
                 return;
             }
 
-            // We only scan for Ore once if the Ore Finder is in player inventory
+            // Only scan for Ore if the Ore Finder is in player inventory, and only once
             ItemStack primaryWand = inventoryContainsAAD(player.inventory);
             if (itemstack != primaryWand) {
                 itemstack.setItemDamage(primaryWand == null ? 0 : primaryWand.getItemDamage());
                 return;
             }
 
-            // The ore stack that's in the wand
             ItemStack searchItem = ExtendedPlayer.get(player).inventorybk.getStackInSlot(0);
+            MatchTarget target = resolveMatch(searchItem);
 
-            if (searchItem == null) {
+            if (!target.canSearch()) {
                 itemstack.setItemDamage(0);
                 return;
-            }
-
-            for (String ss : ConfigHandler.blacklist) {
-                if (ss != null && ss.equals(searchItem.getUnlocalizedName())) {
-                    itemstack.setItemDamage(0);
-                    return;
-                }
-            }
-
-            // If the filter item is in allow-listed entry, the wand looks for that exact block.
-            Block allowBlock = null;
-            int allowMeta = NO_MATCH;
-
-            if (searchItem.getItem() instanceof ItemBlock filterItemBlock) {
-                Block filterBlock = Block.getBlockFromItem(filterItemBlock);
-                int rule = allowlistMatch(filterBlock, filterItemBlock.getMetadata(searchItem.getItemDamage()));
-                if (rule != NO_MATCH) {
-                    allowBlock = filterBlock;
-                    allowMeta = rule;
-                }
-            }
-
-            ReferenceOpenHashSet<IOreMaterial> materials = new ReferenceOpenHashSet<>();
-
-            if (allowBlock == null) {
-                IOreMaterial searchMaterial = OreManager.getMaterial(searchItem);
-                if (searchMaterial != null) {
-                    materials.add(searchMaterial);
-                } else {
-                    for (var oredict : OrePrefixes.detectPrefix(searchItem)) {
-                        IOreMaterial mat = IOreMaterial.findMaterial(oredict.material);
-                        if (mat != null) {
-                            materials.add(mat);
-                        }
-                    }
-                }
             }
 
             int cur_x = MathHelper.floor_double(entity.posX);
             int cur_y = MathHelper.floor_double(entity.posY);
             int cur_z = MathHelper.floor_double(entity.posZ);
 
-            AreaScan scan = scanArea(world, cur_x, cur_y, cur_z, allowBlock, allowMeta, materials);
+            AreaScan scan = scanArea(world, cur_x, cur_y, cur_z, target);
 
             if (scan.oreMaterial != null) {
                 prospectForVeins(world, player, cur_x, cur_z, scan.oreMaterial);
@@ -192,13 +157,72 @@ public class ItemOreFinderTool extends Item {
         }
     }
 
+    // Resolves what the wand will actually look for
+    public static MatchTarget resolveMatch(ItemStack searchItem) {
+        if (searchItem == null) {
+            return MatchTarget.NONE;
+        }
+
+        if (searchItem.getItem() instanceof ItemBlock filterItemBlock) {
+            Block filterBlock = Block.getBlockFromItem(filterItemBlock);
+            int meta = filterItemBlock.getMetadata(searchItem.getItemDamage());
+
+            if (listMatch(ConfigHandler.blocklist, filterBlock, meta) != NO_MATCH) {
+                return MatchTarget.BLOCKLISTED;
+            }
+
+            int rule = listMatch(ConfigHandler.allowlist, filterBlock, meta);
+            if (rule != NO_MATCH) {
+                return MatchTarget.block(filterBlock, rule);
+            }
+        }
+
+        // Resolve the ore material(s) the filter stands for, dropping any the material block-list forbids.
+        ReferenceOpenHashSet<IOreMaterial> materials = new ReferenceOpenHashSet<>();
+        boolean resolved = false;
+        IOreMaterial searchMaterial = OreManager.getMaterial(searchItem);
+        if (searchMaterial != null) {
+            resolved = true;
+            if (!isMaterialBlocked(searchMaterial)) {
+                materials.add(searchMaterial);
+            }
+        } else {
+            for (var oredict : OrePrefixes.detectPrefix(searchItem)) {
+                IOreMaterial mat = IOreMaterial.findMaterial(oredict.material);
+                if (mat != null) {
+                    resolved = true;
+                    if (!isMaterialBlocked(mat)) {
+                        materials.add(mat);
+                    }
+                }
+            }
+        }
+
+        if (!materials.isEmpty()) {
+            return MatchTarget.materials(materials);
+        }
+        return resolved ? MatchTarget.BLOCKLISTED : MatchTarget.NONE;
+    }
+
+    private static boolean isMaterialBlocked(IOreMaterial material) {
+        String internalName = material.getInternalName();
+
+        for (String entry : ConfigHandler.materialBlocklist) {
+            if (entry != null && entry.trim().equalsIgnoreCase(internalName)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
-     * Scans the area and reports how many matching blocks were found (capped at {@link #MAX_FOUND}). In ore mode the
-     * matched material is reported back so the caller can run vein prospecting; allow-listed block searches leave it
-     * {@code null}.
+     * Scans the area and reports how many matching blocks were found (capped at {@link #MAX_FOUND}).
      */
-    private static AreaScan scanArea(World world, int centerX, int centerY, int centerZ, Block allowBlock,
-            int allowMeta, ReferenceOpenHashSet<IOreMaterial> materials) {
+    private static AreaScan scanArea(World world, int centerX, int centerY, int centerZ, MatchTarget target) {
+        Block allowBlock = target.block;
+        int allowMeta = target.meta;
+        ReferenceOpenHashSet<IOreMaterial> materials = target.materials;
 
         int minX = centerX - ConfigHandler.xzAreaRadius - 1;
         int maxX = centerX + ConfigHandler.xzAreaRadius;
@@ -253,19 +277,71 @@ public class ItemOreFinderTool extends Item {
     }
 
     /**
-     * Checks whether the given block is permitted by {@link ConfigHandler#allowlist}. Entries use the block registry
-     * name with an optional metadata suffix: {@code "modid:block"} matches any metadata, {@code "modid:block:2"}
-     * matches only metadata 2.
-     *
-     * @return the metadata the wand should look for ({@link #ANY_META} for wildcard entries), or {@link #NO_MATCH} if
-     *         the block isn't allow-listed.
+     * The outcome of {@link #resolveMatch}: either an allow-listed {@link #block} (optionally with metadata), a set of
+     * ore {@link #materials}, or neither.
      */
-    private static int allowlistMatch(Block block, int meta) {
+    public static final class MatchTarget {
+
+        private enum Kind {
+            NONE,
+            BLOCKLISTED,
+            BLOCK,
+            MATERIALS
+        }
+
+        private static final MatchTarget NONE = new MatchTarget(Kind.NONE, null, ANY_META, null);
+        private static final MatchTarget BLOCKLISTED = new MatchTarget(Kind.BLOCKLISTED, null, ANY_META, null);
+
+        private final Kind kind;
+        private final Block block;
+        private final int meta;
+        private final ReferenceOpenHashSet<IOreMaterial> materials;
+
+        private MatchTarget(Kind kind, Block block, int meta, ReferenceOpenHashSet<IOreMaterial> materials) {
+            this.kind = kind;
+            this.block = block;
+            this.meta = meta;
+            this.materials = materials;
+        }
+
+        private static MatchTarget block(Block block, int meta) {
+            return new MatchTarget(Kind.BLOCK, block, meta, null);
+        }
+
+        private static MatchTarget materials(ReferenceOpenHashSet<IOreMaterial> materials) {
+            return new MatchTarget(Kind.MATERIALS, null, ANY_META, materials);
+        }
+
+        public boolean canSearch() {
+            return kind == Kind.BLOCK || kind == Kind.MATERIALS;
+        }
+
+        public boolean isBlocklisted() {
+            return kind == Kind.BLOCKLISTED;
+        }
+
+        public String describe() {
+            return switch (kind) {
+                case BLOCK -> new ItemStack(block, 1, meta == ANY_META ? 0 : meta).getDisplayName();
+                case MATERIALS -> materials.stream().map(IOreMaterial::getLocalizedName)
+                        .collect(Collectors.joining(", "));
+                default -> GTUtility.translate("IFU.SearchNoMatch");
+            };
+        }
+    }
+
+    /**
+     * Checks whether {@code block}/{@code meta} appears in the given list of config, shared by the allow-list and
+     * block-list.
+     *
+     * @return the matched metadata ({@link #ANY_META} for a wildcard entry), or {@link #NO_MATCH} if no entry matches.
+     */
+    private static int listMatch(String[] entries, Block block, int meta) {
         if (block == null) {
             return NO_MATCH;
         }
 
-        for (String entry : ConfigHandler.allowlist) {
+        for (String entry : entries) {
             if (entry == null) {
                 continue;
             }
@@ -278,14 +354,14 @@ public class ItemOreFinderTool extends Item {
             String name = entry;
             int entryMeta = ANY_META;
 
-            // A registry name already contains one ':' (modid:block); a second ':' introduces a metadata suffix.
+            // An item already contains one ':' (modid:block); a second ':' introduces a metadata suffix.
             int lastColon = entry.lastIndexOf(':');
             if (lastColon > 0 && lastColon != entry.indexOf(':')) {
                 try {
                     entryMeta = Integer.parseInt(entry.substring(lastColon + 1));
                     name = entry.substring(0, lastColon);
                 } catch (NumberFormatException e) {
-                    // Trailing token wasn't a number, so treat the whole entry as the registry name.
+                    // Trailing token wasn't a number, so treat the whole entry as the name.
                     entryMeta = ANY_META;
                     name = entry;
                 }
@@ -351,43 +427,34 @@ public class ItemOreFinderTool extends Item {
     }
 
     /**
-     * Diagnostic helper (enabled by {@link ConfigHandler#debugBlockInfo}): right-clicking a block reports, in chat, its
-     * registry name and metadata, whether it's a recognized ore (with material and the natural/small flags the wand
-     * matches on), and what it drops. Handy for understanding why an ore does or doesn't match and for finding the
-     * registry names to put in {@link ConfigHandler#allowlist}.
+     * Diagnostic helper (enabled by {@link ConfigHandler#debugBlockInfo}): right-clicking a block reports to player its
+     * name and metadata. Handy for understanding why an ore does or doesn't match and for finding what to put in
+     * Allow/Block lists.
      */
     private static void printBlockDebug(World world, EntityPlayer player, int x, int y, int z) {
         Block block = world.getBlock(x, y, z);
         int meta = world.getBlockMetadata(x, y, z);
-
-        GTUtility.sendChatToPlayer(
+        GTUtility.sendChatComp(
                 player,
-                "[OreFinder] Block: " + Block.blockRegistry.getNameForObject(block) + " meta=" + meta);
+                new ChatComponentText(
+                        String.format(
+                                "[OreFinder] Block: %s meta=%d",
+                                Block.blockRegistry.getNameForObject(block),
+                                meta)));
 
         try (OreInfo<IOreMaterial> info = OreManager.getOreInfo(world, x, y, z)) {
             if (info != null) {
-                GTUtility.sendChatToPlayer(
+                GTUtility.sendChatComp(
                         player,
-                        "[OreFinder] Ore material: " + info.material.getInternalName()
-                                + " (stone="
-                                + info.stoneType
-                                + ", natural="
-                                + info.isNatural
-                                + ", small="
-                                + info.isSmall
-                                + ")");
+                        new ChatComponentText(
+                                String.format(
+                                        "[OreFinder] Ore material: %s (stone=%s, natural=%s, small=%s)",
+                                        info.material.getInternalName(),
+                                        info.stoneType,
+                                        info.isNatural,
+                                        info.isSmall)));
             } else {
-                GTUtility.sendChatToPlayer(player, "[OreFinder] Not a recognised ore block");
-            }
-        }
-
-        List<ItemStack> drops = block.getDrops(world, x, y, z, meta, 0);
-        if (drops.isEmpty()) {
-            GTUtility.sendChatToPlayer(player, "[OreFinder] Drops: none");
-        } else {
-            for (ItemStack drop : drops) {
-                GTUtility
-                        .sendChatToPlayer(player, "[OreFinder] Drop: " + drop.stackSize + "x " + drop.getDisplayName());
+                GTUtility.sendChatComp(player, new ChatComponentText("[OreFinder] Not a recognised ore block"));
             }
         }
     }

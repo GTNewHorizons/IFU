@@ -11,8 +11,8 @@ import org.lwjgl.opengl.GL11;
 
 import com.encraft.dz.DayNMod;
 import com.encraft.dz.container.ContainerBuildingKit;
-import com.encraft.dz.handlers.ConfigHandler;
 import com.encraft.dz.inventory.InventoryBuildingKit;
+import com.encraft.dz.items.ItemOreFinderTool;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -27,7 +27,6 @@ public class GuiInvBuildingKit extends GuiContainer {
             DayNMod.MOD_ID,
             "textures/gui/guiIngBuildingKit.png");
     private final InventoryBuildingKit inventory;
-    private ConfigHandler cfg;
 
     public GuiInvBuildingKit(EntityPlayer player, InventoryPlayer inventoryPlayer,
             InventoryBuildingKit inventoryCustom) {
@@ -47,27 +46,37 @@ public class GuiInvBuildingKit extends GuiContainer {
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 
         ItemStack slotek = inventory.getStackInSlot(0);
-        String co_wnim;
+        ItemOreFinderTool.MatchTarget target = ItemOreFinderTool.resolveMatch(slotek);
+
+        String title = StatCollector.translateToLocal(inventory.getInventoryName());
+        int width = fontRendererObj.getStringWidth(title);
+        fontRendererObj.drawString(title, 88 - width / 2, 12, 4210752);
+
+        if (target.isBlocklisted()) {
+            fontRendererObj.drawString(GTUtility.translate("IFU.BlocklistedBlock"), 27, ySize - 116, 4210752);
+        }
+
+        int maxTextWidth = xSize - 10 - 8;
+
+        String name = slotek != null ? slotek.getDisplayName() : StatCollector.translateToLocal("IFU.Empty");
+        fontRendererObj
+                .drawString(fit(GTUtility.translate("IFU.NameTip", name), maxTextWidth), 10, ySize - 106, 4210752);
+
         if (slotek != null) {
-            co_wnim = slotek.getDisplayName();
-        } else {
-            co_wnim = StatCollector.translateToLocal("IFU.Empty");
+            int color = target.canSearch() ? 4210752 : 0xAA0000;
+            fontRendererObj.drawString(
+                    fit(GTUtility.translate("IFU.SearchTip", target.describe()), maxTextWidth),
+                    10,
+                    ySize - 96,
+                    color);
         }
+    }
 
-        String s = StatCollector.translateToLocal(inventory.getInventoryName());
-
-        int width = fontRendererObj.getStringWidth(s);
-        fontRendererObj.drawString(s, 88 - width / 2, 12, 4210752);
-
-        String[] blacklisted = cfg.blacklist;
-        for (String ss : blacklisted) {
-            if (ss != null && slotek != null && ss.equals(slotek.getUnlocalizedName())) {
-                fontRendererObj.drawString(GTUtility.translate("IFU.BlacklistedBlock"), 27, ySize - 116, 4210752);
-                break;
-            }
+    private String fit(String text, int maxWidth) {
+        if (fontRendererObj.getStringWidth(text) <= maxWidth) {
+            return text;
         }
-
-        fontRendererObj.drawString(GTUtility.translate("IFU.NameTip", co_wnim), 10, ySize - 96, 4210752);
+        return fontRendererObj.trimStringToWidth(text, maxWidth - fontRendererObj.getStringWidth("...")) + "...";
     }
 
     @Override
