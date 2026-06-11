@@ -1,7 +1,6 @@
 package com.encraft.dz.items;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +31,7 @@ import gregtech.api.interfaces.IOreMaterial;
 import gregtech.api.util.GTUtility;
 import gregtech.common.ores.OreInfo;
 import gregtech.common.ores.OreManager;
+import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 
 public class ItemOreFinderTool extends Item {
 
@@ -161,17 +161,17 @@ public class ItemOreFinderTool extends Item {
                 }
             }
 
-            HashSet<String> materials = new HashSet<>();
+            ReferenceOpenHashSet<IOreMaterial> materials = new ReferenceOpenHashSet<>();
 
             if (allowBlock == null) {
                 IOreMaterial searchMaterial = OreManager.getMaterial(searchItem);
                 if (searchMaterial != null) {
-                    materials.add(searchMaterial.getInternalName());
+                    materials.add(searchMaterial);
                 } else {
                     for (var oredict : OrePrefixes.detectPrefix(searchItem)) {
                         IOreMaterial mat = IOreMaterial.findMaterial(oredict.material);
                         if (mat != null) {
-                            materials.add(mat.getInternalName());
+                            materials.add(mat);
                         }
                     }
                 }
@@ -211,7 +211,7 @@ public class ItemOreFinderTool extends Item {
 
                         try (OreInfo<IOreMaterial> info = OreManager.getOreInfo(world, x1, y1, z1)) {
                             if (info != null && info.isNatural && !info.isSmall) {
-                                if (materials.contains(info.material.getInternalName())) {
+                                if (materials.contains(info.material)) {
                                     found++;
 
                                     oreMaterial = info.material;
