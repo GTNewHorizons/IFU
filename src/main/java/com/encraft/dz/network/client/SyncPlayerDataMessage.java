@@ -12,23 +12,14 @@ import com.encraft.dz.network.AbstractMessage.AbstractClientMessage;
 import cpw.mods.fml.relauncher.Side;
 
 public class SyncPlayerDataMessage extends AbstractClientMessage<SyncPlayerDataMessage> {
-    // Previously, we've been writing each field in our properties one at a time,
-    // but that is really annoying, and we've already done it in the save and load
-    // NBT methods anyway, so here's a slick way to efficiently send all of your
-    // extended data, and no matter how much you add or remove, you'll never have
-    // to change the packet / synchronization of your data.
 
-    // this will store our OreFinderPlayerData data, allowing us to easily read and write
     private NBTTagCompound data;
 
-    // The basic, no-argument constructor MUST be included to use the new automated handling
+    /** Required no-arg constructor: Forge instantiates the message reflectively when it is received. */
     public SyncPlayerDataMessage() {}
 
-    // We need to initialize our data, so provide a suitable constructor:
     public SyncPlayerDataMessage(EntityPlayer player) {
-        // create a new tag compound
         data = new NBTTagCompound();
-        // and save our player's data into it
         OreFinderPlayerData.get(player).saveNBTData(data);
     }
 

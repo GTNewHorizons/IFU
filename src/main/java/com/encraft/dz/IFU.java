@@ -29,8 +29,7 @@ public class IFU {
     private static int modGuiIndex = 10;
     public static final int GUI_ORE_FINDER = modGuiIndex++;
 
-    public static CreativeTabs creativeTab = new CreativeTabs("IFU") // tools tab
-    {
+    public static CreativeTabs creativeTab = new CreativeTabs("IFU") {
 
         public Item getTabIconItem() {
             return IFUItems.oreFinder;

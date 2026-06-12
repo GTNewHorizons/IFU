@@ -16,10 +16,6 @@ public class InventoryOreFinder implements IInventory {
 
     private final ItemStack[] inventory = new ItemStack[INV_SIZE];
 
-    public InventoryOreFinder() {
-        // don't need anything here!
-    }
-
     public void copy(InventoryOreFinder inv) {
         for (int i = 0; i < inv.getSizeInventory(); ++i) {
             ItemStack stack = inv.getStackInSlot(i);

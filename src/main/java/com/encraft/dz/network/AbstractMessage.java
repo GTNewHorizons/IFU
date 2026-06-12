@@ -60,11 +60,8 @@ public abstract class AbstractMessage<T extends AbstractMessage<T>> implements I
         }
     }
 
-    // =====================================================================//
-    /*
-     * Make the implementation final so child classes don't need to bother with it, since the message class shouldn't
-     * have anything to do with the handler. This is simply to avoid having to have: public static class Handler extends
-     * GenericMessageHandler<OpenGuiMessage> {} in every single message class for the sole purpose of registration.
+    /**
+     * Final so each message class doubles as its own handler, avoiding a separate handler class per message.
      */
     @Override
     public final IMessage onMessage(T msg, MessageContext ctx) {
