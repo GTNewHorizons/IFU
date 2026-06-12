@@ -236,7 +236,7 @@ public class ItemOreFinderTool extends Item {
     private static void printFilterDebug(EntityPlayer player) {
         ItemStack filter = OreFinderPlayerData.get(player).filterInventory.getStackInSlot(0);
         if (filter == null) {
-            GTUtility.sendChatComp(player, new ChatComponentText("[OreFinder] Filter slot is empty"));
+            GTUtility.sendChatComp(player, new ChatComponentText("[OreFinder] Wand slot is empty"));
             return;
         }
         MatchTarget target = OreFinderSearch.resolveMatch(filter);
@@ -244,7 +244,7 @@ public class ItemOreFinderTool extends Item {
                 player,
                 new ChatComponentText(
                         String.format(
-                                "[OreFinder] Filter '%s' resolves to: %s",
+                                "[OreFinder] Wand slot '%s' resolves to: %s",
                                 filter.getDisplayName(),
                                 target.getInternalName())));
     }
