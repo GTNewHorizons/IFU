@@ -1,11 +1,11 @@
-package com.encraft.network;
+package com.encraft.dz.network;
 
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
 
-import com.encraft.dz.DayNMod;
+import com.encraft.dz.IFU;
 import com.google.common.base.Throwables;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -71,7 +71,7 @@ public abstract class AbstractMessage<T extends AbstractMessage<T>> implements I
         if (!msg.isValidOnSide(ctx.side)) {
             throw new RuntimeException("Invalid side " + ctx.side.name() + " for " + msg.getClass().getSimpleName());
         }
-        msg.process(DayNMod.proxy.getPlayerEntity(ctx), ctx.side);
+        msg.process(IFU.proxy.getPlayerEntity(ctx), ctx.side);
         return null;
     }
 

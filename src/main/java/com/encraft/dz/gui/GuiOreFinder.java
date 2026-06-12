@@ -9,9 +9,9 @@ import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
-import com.encraft.dz.DayNMod;
-import com.encraft.dz.container.ContainerBuildingKit;
-import com.encraft.dz.inventory.InventoryBuildingKit;
+import com.encraft.dz.IFU;
+import com.encraft.dz.container.ContainerOreFinder;
+import com.encraft.dz.inventory.InventoryOreFinder;
 import com.encraft.dz.items.OreFinderSearch;
 
 import cpw.mods.fml.relauncher.Side;
@@ -19,16 +19,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.util.GTUtility;
 
 @SideOnly(Side.CLIENT)
-public class GuiInvBuildingKit extends GuiContainer {
+public class GuiOreFinder extends GuiContainer {
 
     private static final ResourceLocation iconLocation = new ResourceLocation(
-            DayNMod.MOD_ID,
-            "textures/gui/guiIngBuildingKit.png");
-    private final InventoryBuildingKit inventory;
+            IFU.MOD_ID,
+            "textures/gui/gui_ore_finder.png");
+    private final InventoryOreFinder inventory;
 
-    public GuiInvBuildingKit(EntityPlayer player, InventoryPlayer inventoryPlayer,
-            InventoryBuildingKit inventoryCustom) {
-        super(new ContainerBuildingKit(player, inventoryPlayer, inventoryCustom));
+    public GuiOreFinder(EntityPlayer player, InventoryPlayer inventoryPlayer, InventoryOreFinder inventoryCustom) {
+        super(new ContainerOreFinder(player, inventoryPlayer, inventoryCustom));
 
         this.inventory = inventoryCustom;
     }
@@ -36,8 +35,8 @@ public class GuiInvBuildingKit extends GuiContainer {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 
-        ItemStack slotek = inventory.getStackInSlot(0);
-        OreFinderSearch.MatchTarget target = OreFinderSearch.resolveMatch(slotek);
+        ItemStack filterStack = inventory.getStackInSlot(0);
+        OreFinderSearch.MatchTarget target = OreFinderSearch.resolveMatch(filterStack);
 
         String title = StatCollector.translateToLocal(inventory.getInventoryName());
         int width = fontRendererObj.getStringWidth(title);
@@ -49,11 +48,11 @@ public class GuiInvBuildingKit extends GuiContainer {
 
         int maxTextWidth = xSize - 10 - 8;
 
-        String name = slotek != null ? slotek.getDisplayName() : StatCollector.translateToLocal("IFU.Empty");
+        String name = filterStack != null ? filterStack.getDisplayName() : StatCollector.translateToLocal("IFU.Empty");
         fontRendererObj
                 .drawString(fit(GTUtility.translate("IFU.NameTip", name), maxTextWidth), 10, ySize - 106, 4210752);
 
-        if (slotek != null) {
+        if (filterStack != null) {
             int color = target.canSearch() ? 4210752 : 0xAA0000;
             fontRendererObj.drawString(
                     fit(GTUtility.translate("IFU.SearchTip", target.describe()), maxTextWidth),

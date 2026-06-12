@@ -4,7 +4,7 @@ import java.io.File;
 
 import net.minecraftforge.common.config.Configuration;
 
-import com.encraft.dz.DayNMod;
+import com.encraft.dz.IFU;
 
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -19,12 +19,12 @@ public class ConfigHandler {
     public static String[] blocklist = {};
     public static String[] materialBlocklist = {};
     public static String[] allowlist = {};
-    public static boolean aEnableEverywhere = false;
+    public static boolean enableEverywhere = false;
     public static boolean debugBlockInfo = false;
 
     public static void init(String configDir) {
         if (cfg == null) {
-            File path = new File(configDir + "/" + DayNMod.MOD_ID + ".cfg");
+            File path = new File(configDir + "/" + IFU.MOD_ID + ".cfg");
             cfg = new Configuration(path);
             loadConfiguration();
         }
@@ -46,7 +46,7 @@ public class ConfigHandler {
                 1,
                 60,
                 " change scanning distance above and below the player");
-        aEnableEverywhere = cfg.getBoolean(
+        enableEverywhere = cfg.getBoolean(
                 "Enable Everywhere",
                 cfg.CATEGORY_GENERAL,
                 false,
@@ -92,7 +92,7 @@ public class ConfigHandler {
 
     @SubscribeEvent
     public void onConfigChangeEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (event.modID.equalsIgnoreCase(DayNMod.MOD_ID)) {
+        if (event.modID.equalsIgnoreCase(IFU.MOD_ID)) {
             loadConfiguration();
         }
     }

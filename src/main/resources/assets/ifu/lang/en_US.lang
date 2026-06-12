@@ -1,6 +1,6 @@
 item.ifu_buildingKit.name=Ore Finder Wand
 gui.ifu_buildingKit.title=Ore Finder Wand
-itemGroup.DayNModTools=IFU
+itemGroup.IFU=IFU
 IFU.FindTarget=I want to find: %s
 IFU.description1=Put ore block you want to find in item inventory
 IFU.description2=SHIFT+RIGHT CLICK on ground to open inventory

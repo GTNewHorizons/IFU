@@ -1,9 +1,9 @@
-package com.encraft.network;
+package com.encraft.dz.network;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 
-import com.encraft.dz.DayNMod;
-import com.encraft.network.client.SyncPlayerPropsMessage;
+import com.encraft.dz.IFU;
+import com.encraft.dz.network.client.SyncPlayerDataMessage;
 
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -20,14 +20,14 @@ public class PacketDispatcher {
      * The SimpleNetworkWrapper instance is used both to register and send packets. Since I will be adding wrapper
      * methods, this field is private, but you should make it public if you plan on using it directly.
      */
-    private static final SimpleNetworkWrapper dispatcher = NetworkRegistry.INSTANCE.newSimpleChannel(DayNMod.MOD_ID);
+    private static final SimpleNetworkWrapper dispatcher = NetworkRegistry.INSTANCE.newSimpleChannel(IFU.MOD_ID);
 
     /**
      * Call this during pre-init or loading and register all of your packets (messages) here
      */
     public static final void registerPackets() {
         // Packets handled on CLIENT
-        registerMessage(SyncPlayerPropsMessage.class);
+        registerMessage(SyncPlayerDataMessage.class);
     }
 
     /**

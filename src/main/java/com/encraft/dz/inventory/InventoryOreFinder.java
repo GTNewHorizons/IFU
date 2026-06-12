@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagList;
 
 import com.encraft.dz.items.ItemOreFinderTool;
 
-public class InventoryBuildingKit implements IInventory {
+public class InventoryOreFinder implements IInventory {
 
     private final String name = "Ore Finder Wand";
 
@@ -18,11 +18,11 @@ public class InventoryBuildingKit implements IInventory {
 
     private ItemStack[] inventory = new ItemStack[INV_SIZE];
 
-    public InventoryBuildingKit() {
+    public InventoryOreFinder() {
         // don't need anything here!
     }
 
-    public void copy(InventoryBuildingKit inv) {
+    public void copy(InventoryOreFinder inv) {
         for (int i = 0; i < inv.getSizeInventory(); ++i) {
             ItemStack stack = inv.getStackInSlot(i);
             inventory[i] = (stack == null ? null : stack.copy());

@@ -7,9 +7,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
-import com.encraft.dz.inventory.InventoryBuildingKit;
+import com.encraft.dz.inventory.InventoryOreFinder;
 
-public class ExtendedPlayer implements IExtendedEntityProperties {
+public class OreFinderPlayerData implements IExtendedEntityProperties {
 
     public final static String EXT_PROP_NAME = "ExtendedPlayerProp";
 
@@ -17,7 +17,7 @@ public class ExtendedPlayer implements IExtendedEntityProperties {
 
     /** Custom inventory slots */
 
-    public final InventoryBuildingKit inventorybk = new InventoryBuildingKit();
+    public final InventoryOreFinder filterInventory = new InventoryOreFinder();
 
     private boolean hasLastScan = false;
     private int lastScanX;
@@ -25,21 +25,21 @@ public class ExtendedPlayer implements IExtendedEntityProperties {
     private int lastScanZ;
     private ItemStack lastScanFilter;
 
-    public ExtendedPlayer(EntityPlayer player) {
+    public OreFinderPlayerData(EntityPlayer player) {
         this.player = player;
     }
 
     public static final void register(EntityPlayer player) {
-        player.registerExtendedProperties(ExtendedPlayer.EXT_PROP_NAME, new ExtendedPlayer(player));
+        player.registerExtendedProperties(OreFinderPlayerData.EXT_PROP_NAME, new OreFinderPlayerData(player));
     }
 
-    public static final ExtendedPlayer get(EntityPlayer player) {
-        return (ExtendedPlayer) player.getExtendedProperties(EXT_PROP_NAME);
+    public static final OreFinderPlayerData get(EntityPlayer player) {
+        return (OreFinderPlayerData) player.getExtendedProperties(EXT_PROP_NAME);
     }
 
-    public void copy(ExtendedPlayer props) {
+    public void copy(OreFinderPlayerData props) {
 
-        inventorybk.copy(props.inventorybk);
+        filterInventory.copy(props.filterInventory);
     }
 
     public boolean isSameScan(int x, int y, int z, ItemStack filter) {
@@ -66,7 +66,7 @@ public class ExtendedPlayer implements IExtendedEntityProperties {
     public final void saveNBTData(NBTTagCompound compound) {
 
         NBTTagCompound properties = new NBTTagCompound();
-        inventorybk.writeToNBT(properties);
+        filterInventory.writeToNBT(properties);
         compound.setTag(EXT_PROP_NAME, properties);
     }
 
@@ -74,7 +74,7 @@ public class ExtendedPlayer implements IExtendedEntityProperties {
     public final void loadNBTData(NBTTagCompound compound) {
 
         NBTTagCompound properties = (NBTTagCompound) compound.getTag(EXT_PROP_NAME);
-        inventorybk.readFromNBT(properties);
+        filterInventory.readFromNBT(properties);
     }
 
     @Override

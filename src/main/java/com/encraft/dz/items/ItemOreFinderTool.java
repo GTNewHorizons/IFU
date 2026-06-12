@@ -18,8 +18,8 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-import com.encraft.dz.DayNMod;
-import com.encraft.dz.ExtendedPlayer;
+import com.encraft.dz.IFU;
+import com.encraft.dz.OreFinderPlayerData;
 import com.encraft.dz.handlers.ConfigHandler;
 import com.encraft.dz.items.OreFinderSearch.MatchTarget;
 import com.sinthoras.visualprospecting.VisualProspecting_API;
@@ -37,9 +37,9 @@ public class ItemOreFinderTool extends Item {
     private static IIcon[] iconIndexes;
 
     public ItemOreFinderTool() {
-        setUnlocalizedName(DayNMod.MOD_ID + "_" + "buildingKitItem");
+        setUnlocalizedName(IFU.MOD_ID + "_" + "buildingKitItem");
         setMaxStackSize(1);
-        setTextureName(DayNMod.MOD_ID + ":meter0");
+        setTextureName(IFU.MOD_ID + ":meter0");
         setHasSubtypes(true);
     }
 
@@ -48,7 +48,7 @@ public class ItemOreFinderTool extends Item {
         super.registerIcons(p_94581_1_);
         iconIndexes = new IIcon[5];
         for (int i = 0; i <= 4; i++) {
-            iconIndexes[i] = p_94581_1_.registerIcon(DayNMod.MOD_ID + ":meter" + i);
+            iconIndexes[i] = p_94581_1_.registerIcon(IFU.MOD_ID + ":meter" + i);
         }
     }
 
@@ -83,7 +83,7 @@ public class ItemOreFinderTool extends Item {
     }
 
     // Return the first Ore Finder wand in the player inventory, or null if there are none.
-    public static ItemStack inventoryContainsAAD(InventoryPlayer inventory) {
+    public static ItemStack findFirstInInventory(InventoryPlayer inventory) {
         ItemStack itemstack = null;
         for (ItemStack s : inventory.mainInventory) {
             if (s != null && s.getItem() instanceof ItemOreFinderTool) {
@@ -112,7 +112,7 @@ public class ItemOreFinderTool extends Item {
                 world.playSound(entity.posX, entity.posY, entity.posZ, "ic2:tools.Treetap", 0.6F, 0.8F, true);
             }
         } else {
-            if (!ConfigHandler.aEnableEverywhere && world.provider.dimensionId != 0
+            if (!ConfigHandler.enableEverywhere && world.provider.dimensionId != 0
                     && world.provider.dimensionId != -1
                     && !world.provider.getDimensionName().equals("Twilight Forest"))
                 return;
@@ -122,14 +122,14 @@ public class ItemOreFinderTool extends Item {
             }
 
             // Only scan for Ore if the Ore Finder is in player inventory, and only once
-            ItemStack primaryWand = inventoryContainsAAD(player.inventory);
+            ItemStack primaryWand = findFirstInInventory(player.inventory);
             if (itemstack != primaryWand) {
                 itemstack.setItemDamage(primaryWand == null ? 0 : primaryWand.getItemDamage());
                 return;
             }
 
-            ExtendedPlayer props = ExtendedPlayer.get(player);
-            ItemStack searchItem = props.inventorybk.getStackInSlot(0);
+            OreFinderPlayerData props = OreFinderPlayerData.get(player);
+            ItemStack searchItem = props.filterInventory.getStackInSlot(0);
             MatchTarget target = OreFinderSearch.resolveMatch(searchItem);
 
             if (!target.canSearch()) {
@@ -168,7 +168,7 @@ public class ItemOreFinderTool extends Item {
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> list, boolean par4) {
-        ItemStack filterStack = ExtendedPlayer.get(player).inventorybk.getStackInSlot(0);
+        ItemStack filterStack = OreFinderPlayerData.get(player).filterInventory.getStackInSlot(0);
 
         if (filterStack != null) {
             list.add(GTUtility.translate("IFU.FindTarget", filterStack.getDisplayName()));
@@ -179,20 +179,20 @@ public class ItemOreFinderTool extends Item {
         list.add(GTUtility.translate("IFU.description3"));
         list.add(GTUtility.translate("IFU.SearchRadiusText", ConfigHandler.xzAreaRadius, ConfigHandler.yAreaRadius));
 
-        if (!ConfigHandler.aEnableEverywhere) {
+        if (!ConfigHandler.enableEverywhere) {
             list.add(GTUtility.translate("IFU.disableAtSomewhereWarning1"));
             list.add(GTUtility.translate("IFU.disableAtSomewhereWarning2"));
         }
     }
 
-    public boolean onItemUse(ItemStack itemstack, EntityPlayer entityPlayer, World world, int x, int y, int z,
-            int sciankaKliknieta, float objetosc_x, float pbjetosc_y, float objetosc_z) {
+    public boolean onItemUse(ItemStack itemstack, EntityPlayer entityPlayer, World world, int x, int y, int z, int side,
+            float hitX, float hitY, float hitZ) {
 
         if (entityPlayer.isSneaking()) {
             if (!world.isRemote) {
                 entityPlayer.openGui(
-                        DayNMod.instance,
-                        DayNMod.GUI_CUSTOM_INV1,
+                        IFU.instance,
+                        IFU.GUI_ORE_FINDER,
                         entityPlayer.worldObj,
                         (int) entityPlayer.posX,
                         (int) entityPlayer.posY,

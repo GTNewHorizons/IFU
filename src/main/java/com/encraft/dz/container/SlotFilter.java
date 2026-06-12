@@ -6,9 +6,9 @@ import net.minecraft.item.ItemStack;
 
 import com.encraft.dz.items.ItemOreFinderTool;
 
-public class SlotItemInv extends Slot {
+public class SlotFilter extends Slot {
 
-    public SlotItemInv(IInventory inv, int index, int xPos, int yPos) {
+    public SlotFilter(IInventory inv, int index, int xPos, int yPos) {
         super(inv, index, xPos, yPos);
     }
 

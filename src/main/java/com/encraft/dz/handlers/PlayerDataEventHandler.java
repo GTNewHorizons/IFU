@@ -6,19 +6,19 @@ import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
-import com.encraft.dz.ExtendedPlayer;
-import com.encraft.network.PacketDispatcher;
-import com.encraft.network.client.SyncPlayerPropsMessage;
+import com.encraft.dz.OreFinderPlayerData;
+import com.encraft.dz.network.PacketDispatcher;
+import com.encraft.dz.network.client.SyncPlayerDataMessage;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
-public class DayNModEventHandler {
+public class PlayerDataEventHandler {
 
     @SubscribeEvent
     public void onEntityConstructing(EntityConstructing event) {
         if (event.entity instanceof EntityPlayer) {
-            if (ExtendedPlayer.get((EntityPlayer) event.entity) == null)
-                ExtendedPlayer.register((EntityPlayer) event.entity);
+            if (OreFinderPlayerData.get((EntityPlayer) event.entity) == null)
+                OreFinderPlayerData.register((EntityPlayer) event.entity);
         }
     }
 
@@ -26,12 +26,12 @@ public class DayNModEventHandler {
     public void onEntityJoinWorld(EntityJoinWorldEvent event) {
         if (event.entity instanceof EntityPlayer && !event.entity.worldObj.isRemote) {
             PacketDispatcher
-                    .sendTo(new SyncPlayerPropsMessage((EntityPlayer) event.entity), (EntityPlayerMP) event.entity);
+                    .sendTo(new SyncPlayerDataMessage((EntityPlayer) event.entity), (EntityPlayerMP) event.entity);
         }
     }
 
     @SubscribeEvent
     public void onClonePlayer(PlayerEvent.Clone event) {
-        ExtendedPlayer.get(event.entityPlayer).copy(ExtendedPlayer.get(event.original));
+        OreFinderPlayerData.get(event.entityPlayer).copy(OreFinderPlayerData.get(event.original));
     }
 }

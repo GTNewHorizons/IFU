@@ -1,6 +1,6 @@
 item.ifu_buildingKit.name=Wünschelrute
 gui.ifu_buildingKit.title=Wünschelrute
-itemGroup.DayNModTools=IFU
+itemGroup.IFU=IFU
 IFU.FindTarget=Was ich finden will: %s
 IFU.description1=Leg den Erzblock, den du finden willst, in das Iteminventar -"
 IFU.description2=STRG+RECHTSKLICK auf den Boden, um das Inventar zu öffnen
