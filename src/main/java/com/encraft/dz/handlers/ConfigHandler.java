@@ -14,8 +14,8 @@ public class ConfigHandler {
     public static Configuration cfg;
 
     public static boolean wandSound = true;
-    public static int xzAreaRadius = 4;
-    public static int yAreaRadius = 40;
+    public static int xzAreaRadius = 5;
+    public static int yAreaRadius = 60;
     public static String[] blocklist = {};
     public static String[] materialBlocklist = {};
     public static String[] allowlist = {};

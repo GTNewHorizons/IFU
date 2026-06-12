@@ -159,8 +159,8 @@ public class ItemOreFinderTool extends Item {
 
     private void prospectForVeins(World world, EntityPlayerMP player, int x1, int z1, IOreMaterial ore) {
         List<OreVeinPosition> veins = VisualProspecting_API.LogicalServer
-                .prospectOreVeinsWithinRadius(world.provider.dimensionId, x1, z1, 48).stream()
-                .filter(it -> it.veinType.containsOre(ore)).collect(Collectors.toList());
+                .prospectOreVeinsWithinRadius(world.provider.dimensionId, x1, z1, ConfigHandler.xzAreaRadius + 1)
+                .stream().filter(it -> it.veinType.containsOre(ore)).collect(Collectors.toList());
 
         VisualProspecting_API.LogicalServer.sendProspectionResultsToClient(player, veins, Collections.emptyList());
     }
