@@ -15,7 +15,7 @@ public class SyncPlayerDataMessage extends AbstractClientMessage<SyncPlayerDataM
 
     private NBTTagCompound data;
 
-    /** Required no-arg constructor: Forge instantiates the message reflectively when it is received. */
+    @SuppressWarnings("unused")
     public SyncPlayerDataMessage() {}
 
     public SyncPlayerDataMessage(EntityPlayer player) {
