@@ -7,6 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
 import com.encraft.dz.items.ItemOreFinderTool;
+import com.encraft.dz.items.OreFinderSearch;
 
 public class InventoryOreFinder implements IInventory {
 
@@ -103,7 +104,7 @@ public class InventoryOreFinder implements IInventory {
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        return !(stack.getItem() instanceof ItemOreFinderTool);
+        return !(stack.getItem() instanceof ItemOreFinderTool) && OreFinderSearch.isAcceptableFilter(stack);
     }
 
     public void writeToNBT(NBTTagCompound compound) {

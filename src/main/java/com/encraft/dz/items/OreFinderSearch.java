@@ -76,6 +76,11 @@ public final class OreFinderSearch {
         return resolved ? MatchTarget.BLOCKLISTED : MatchTarget.NONE;
     }
 
+    public static boolean isAcceptableFilter(ItemStack stack) {
+        MatchTarget target = resolveMatch(stack);
+        return target.canSearch() || target.isBlocklisted();
+    }
+
     private static boolean isMaterialBlocked(IOreMaterial material) {
         String internalName = material.getInternalName();
 

@@ -5,6 +5,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 import com.encraft.dz.items.ItemOreFinderTool;
+import com.encraft.dz.items.OreFinderSearch;
 
 public class SlotFilter extends Slot {
 
@@ -14,6 +15,6 @@ public class SlotFilter extends Slot {
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return !(stack.getItem() instanceof ItemOreFinderTool);
+        return !(stack.getItem() instanceof ItemOreFinderTool) && OreFinderSearch.isAcceptableFilter(stack);
     }
 }
