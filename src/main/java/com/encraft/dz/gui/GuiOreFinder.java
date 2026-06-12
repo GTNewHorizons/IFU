@@ -55,7 +55,7 @@ public class GuiOreFinder extends GuiContainer {
         if (filterStack != null) {
             int color = target.canSearch() ? 4210752 : 0xAA0000;
             fontRendererObj.drawString(
-                    fit(GTUtility.translate("IFU.SearchTip", target.describe()), maxTextWidth),
+                    fit(GTUtility.translate("IFU.SearchTip", target.getLocalizedName()), maxTextWidth),
                     10,
                     ySize - 96,
                     color);

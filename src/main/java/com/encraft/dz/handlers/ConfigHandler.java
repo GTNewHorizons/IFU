@@ -84,7 +84,8 @@ public class ConfigHandler {
                 "Debug block info",
                 Configuration.CATEGORY_GENERAL,
                 false,
-                "If true, right-clicking a block with the Ore Finder prints its name, metadata, ore material/flags to chat. "
+                "If true, right-clicking a block with the Ore Finder prints: the block's name, metadata and ore material/flags, "
+                        + "plus the material internalName(s) the item inside the wand resolves to (can be used by Material Blocklist). "
                         + "Useful for diagnosing ore matching and for finding what to put in an Allow/Block list");
 
         if (cfg.hasChanged()) {

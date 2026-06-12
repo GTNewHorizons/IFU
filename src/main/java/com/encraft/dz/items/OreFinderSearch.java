@@ -204,12 +204,22 @@ public final class OreFinderSearch {
             return kind == Kind.BLOCKLISTED;
         }
 
-        public String describe() {
+        public String getLocalizedName() {
             return switch (kind) {
                 case BLOCK -> new ItemStack(block, 1, meta == ANY_META ? 0 : meta).getDisplayName();
                 case MATERIALS -> materials.stream().map(IOreMaterial::getLocalizedName)
                         .collect(Collectors.joining(", "));
                 default -> GTUtility.translate("IFU.SearchNoMatch");
+            };
+        }
+
+        public String getInternalName() {
+            return switch (kind) {
+                case BLOCK -> Block.blockRegistry.getNameForObject(block) + (meta == ANY_META ? "" : ":" + meta);
+                case MATERIALS -> materials.stream().map(IOreMaterial::getInternalName)
+                        .collect(Collectors.joining(", "));
+                case BLOCKLISTED -> "block-listed";
+                case NONE -> "no match";
             };
         }
     }

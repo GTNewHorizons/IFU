@@ -200,15 +200,11 @@ public class ItemOreFinderTool extends Item {
             }
         } else if (ConfigHandler.debugBlockInfo && !world.isRemote) {
             printBlockDebug(world, entityPlayer, x, y, z);
+            printFilterDebug(entityPlayer);
         }
         return true;
     }
 
-    /**
-     * Diagnostic helper (enabled by {@link ConfigHandler#debugBlockInfo}): right-clicking a block reports to player its
-     * name and metadata. Handy for understanding why an ore does or doesn't match and for finding what to put in
-     * Allow/Block lists.
-     */
     private static void printBlockDebug(World world, EntityPlayer player, int x, int y, int z) {
         Block block = world.getBlock(x, y, z);
         int meta = world.getBlockMetadata(x, y, z);
@@ -235,5 +231,21 @@ public class ItemOreFinderTool extends Item {
                 GTUtility.sendChatComp(player, new ChatComponentText("[OreFinder] Not a recognised ore block"));
             }
         }
+    }
+
+    private static void printFilterDebug(EntityPlayer player) {
+        ItemStack filter = OreFinderPlayerData.get(player).filterInventory.getStackInSlot(0);
+        if (filter == null) {
+            GTUtility.sendChatComp(player, new ChatComponentText("[OreFinder] Filter slot is empty"));
+            return;
+        }
+        MatchTarget target = OreFinderSearch.resolveMatch(filter);
+        GTUtility.sendChatComp(
+                player,
+                new ChatComponentText(
+                        String.format(
+                                "[OreFinder] Filter '%s' resolves to: %s",
+                                filter.getDisplayName(),
+                                target.getInternalName())));
     }
 }
