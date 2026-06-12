@@ -59,7 +59,7 @@ public class ContainerOreFinder extends Container {
             ItemStack toMove = fromSlot.getStack();
             if (toMove == null) return null;
             for (int i = 1; i < this.inventorySlots.size(); i++) {
-                Slot toSlot = (Slot) this.inventorySlots.get(i);
+                Slot toSlot = this.inventorySlots.get(i);
                 ItemStack toPlace = toSlot.getStack();
 
                 if (GTUtility.areStacksEqual(toMove, toPlace) && toPlace.stackSize < toPlace.getMaxStackSize()) {
@@ -70,7 +70,7 @@ public class ContainerOreFinder extends Container {
                 }
             }
             for (int i = 1; i < this.inventorySlots.size(); i++) {
-                Slot toSlot = ((Slot) this.inventorySlots.get(i));
+                Slot toSlot = this.inventorySlots.get(i);
                 if (!canMerge && toSlot.getStack() == null) {
                     fromSlot.putStack(null);
                     toSlot.putStack(toMove);

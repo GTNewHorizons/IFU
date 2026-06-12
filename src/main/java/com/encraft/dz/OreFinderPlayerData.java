@@ -13,8 +13,6 @@ public class OreFinderPlayerData implements IExtendedEntityProperties {
 
     public final static String EXT_PROP_NAME = "ExtendedPlayerProp";
 
-    private final EntityPlayer player;
-
     /** Custom inventory slots */
 
     public final InventoryOreFinder filterInventory = new InventoryOreFinder();
@@ -25,15 +23,11 @@ public class OreFinderPlayerData implements IExtendedEntityProperties {
     private int lastScanZ;
     private ItemStack lastScanFilter;
 
-    public OreFinderPlayerData(EntityPlayer player) {
-        this.player = player;
+    public static void register(EntityPlayer player) {
+        player.registerExtendedProperties(OreFinderPlayerData.EXT_PROP_NAME, new OreFinderPlayerData());
     }
 
-    public static final void register(EntityPlayer player) {
-        player.registerExtendedProperties(OreFinderPlayerData.EXT_PROP_NAME, new OreFinderPlayerData(player));
-    }
-
-    public static final OreFinderPlayerData get(EntityPlayer player) {
+    public static OreFinderPlayerData get(EntityPlayer player) {
         return (OreFinderPlayerData) player.getExtendedProperties(EXT_PROP_NAME);
     }
 

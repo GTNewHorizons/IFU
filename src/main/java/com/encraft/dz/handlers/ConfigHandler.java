@@ -34,35 +34,39 @@ public class ConfigHandler {
 
         xzAreaRadius = cfg.getInt(
                 "X Z Area radius",
-                cfg.CATEGORY_GENERAL,
+                Configuration.CATEGORY_GENERAL,
                 xzAreaRadius,
                 1,
                 16,
                 " change scanning radius from player");
         yAreaRadius = cfg.getInt(
                 "Y Area radius",
-                cfg.CATEGORY_GENERAL,
+                Configuration.CATEGORY_GENERAL,
                 yAreaRadius,
                 1,
                 60,
                 " change scanning distance above and below the player");
         enableEverywhere = cfg.getBoolean(
                 "Enable Everywhere",
-                cfg.CATEGORY_GENERAL,
+                Configuration.CATEGORY_GENERAL,
                 false,
                 "If this is set to false, the OreFinder will only work in the Owerworld, Nether and Twilight Forest");
-        wandSound = cfg.getBoolean("Sounds", cfg.CATEGORY_GENERAL, wandSound, "If true, Ore finder will play sounds");
+        wandSound = cfg.getBoolean(
+                "Sounds",
+                Configuration.CATEGORY_GENERAL,
+                wandSound,
+                "If true, Ore finder will play sounds");
 
         blocklist = cfg.getStringList(
                 "Blocklist",
-                cfg.CATEGORY_GENERAL,
+                Configuration.CATEGORY_GENERAL,
                 blocklist,
                 "Blocks the Ore Finder must never search for, that it would otherwise match on its own. "
                         + "Use the block Item ID, same rules as Allowlist");
 
         materialBlocklist = cfg.getStringList(
                 "Material Blocklist",
-                cfg.CATEGORY_GENERAL,
+                Configuration.CATEGORY_GENERAL,
                 materialBlocklist,
                 "Ore materials the Ore Finder must never search for. "
                         + "Use the material name printed by the Debug block info option, for example: "
@@ -70,7 +74,7 @@ public class ConfigHandler {
 
         allowlist = cfg.getStringList(
                 "Allowlist",
-                cfg.CATEGORY_GENERAL,
+                Configuration.CATEGORY_GENERAL,
                 allowlist,
                 "Extra non-ore blocks allowed by Ore Finder. "
                         + "Use the block Item ID with an optional metadata suffix: "
@@ -78,7 +82,7 @@ public class ConfigHandler {
 
         debugBlockInfo = cfg.getBoolean(
                 "Debug block info",
-                cfg.CATEGORY_GENERAL,
+                Configuration.CATEGORY_GENERAL,
                 false,
                 "If true, right-clicking a block with the Ore Finder prints its name, metadata, ore material/flags to chat. "
                         + "Useful for diagnosing ore matching and for finding what to put in an Allow/Block list");

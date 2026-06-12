@@ -10,13 +10,11 @@ import com.encraft.dz.items.ItemOreFinderTool;
 
 public class InventoryOreFinder implements IInventory {
 
-    private final String name = "Ore Finder Wand";
-
     private final String tagName = "BuildingKit";
 
     public static final int INV_SIZE = 2;
 
-    private ItemStack[] inventory = new ItemStack[INV_SIZE];
+    private final ItemStack[] inventory = new ItemStack[INV_SIZE];
 
     public InventoryOreFinder() {
         // don't need anything here!
@@ -79,7 +77,7 @@ public class InventoryOreFinder implements IInventory {
 
     @Override
     public boolean hasCustomInventoryName() {
-        return name.length() > 0;
+        return true;
     }
 
     @Override

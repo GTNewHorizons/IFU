@@ -25,7 +25,7 @@ public class PacketDispatcher {
     /**
      * Call this during pre-init or loading and register all of your packets (messages) here
      */
-    public static final void registerPackets() {
+    public static void registerPackets() {
         // Packets handled on CLIENT
         registerMessage(SyncPlayerDataMessage.class);
     }
@@ -33,8 +33,7 @@ public class PacketDispatcher {
     /**
      * Registers an {@link AbstractMessage} to the appropriate side(s)
      */
-    private static final <T extends AbstractMessage<T> & IMessageHandler<T, IMessage>> void registerMessage(
-            Class<T> clazz) {
+    private static <T extends AbstractMessage<T> & IMessageHandler<T, IMessage>> void registerMessage(Class<T> clazz) {
         // We can tell by the message class which side to register it on by using #isAssignableFrom (google it)
 
         // Also, one can see the convenience of using a static counter 'packetId' to keep
@@ -55,7 +54,7 @@ public class PacketDispatcher {
      * Send this message to the specified player's client-side counterpart. See
      * {@link SimpleNetworkWrapper#sendTo(IMessage, EntityPlayerMP)}
      */
-    public static final void sendTo(IMessage message, EntityPlayerMP player) {
+    public static void sendTo(IMessage message, EntityPlayerMP player) {
         PacketDispatcher.dispatcher.sendTo(message, player);
     }
 }
