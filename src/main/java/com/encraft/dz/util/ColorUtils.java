@@ -1,11 +1,10 @@
 package com.encraft.dz.util;
 
-import com.encraft.dz.IFU;
 import com.gtnewhorizon.gtnhlib.color.ColorResource;
 
 public class ColorUtils {
 
-    private static final ColorResource.Factory color = new ColorResource.Factory(IFU.MOD_ID);
+    private static final ColorResource.Factory color = new ColorResource.Factory("ifu");
 
     public static final ColorResource
     // spotless:off
