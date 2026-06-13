@@ -7,22 +7,17 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
 import com.encraft.dz.items.ItemOreFinderTool;
+import com.encraft.dz.items.OreFinderSearch;
 
-public class InventoryBuildingKit implements IInventory {
-
-    private final String name = "Ore Finder Wand";
+public class InventoryOreFinder implements IInventory {
 
     private final String tagName = "BuildingKit";
 
     public static final int INV_SIZE = 2;
 
-    private ItemStack[] inventory = new ItemStack[INV_SIZE];
+    private final ItemStack[] inventory = new ItemStack[INV_SIZE];
 
-    public InventoryBuildingKit() {
-        // don't need anything here!
-    }
-
-    public void copy(InventoryBuildingKit inv) {
+    public void copy(InventoryOreFinder inv) {
         for (int i = 0; i < inv.getSizeInventory(); ++i) {
             ItemStack stack = inv.getStackInSlot(i);
             inventory[i] = (stack == null ? null : stack.copy());
@@ -79,7 +74,7 @@ public class InventoryBuildingKit implements IInventory {
 
     @Override
     public boolean hasCustomInventoryName() {
-        return name.length() > 0;
+        return true;
     }
 
     @Override
@@ -109,8 +104,7 @@ public class InventoryBuildingKit implements IInventory {
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-
-        return stack.getItem() instanceof ItemOreFinderTool;
+        return !(stack.getItem() instanceof ItemOreFinderTool) && OreFinderSearch.isAcceptableFilter(stack);
     }
 
     public void writeToNBT(NBTTagCompound compound) {

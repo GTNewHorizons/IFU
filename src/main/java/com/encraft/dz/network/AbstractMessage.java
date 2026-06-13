@@ -1,11 +1,11 @@
-package com.encraft.network;
+package com.encraft.dz.network;
 
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
 
-import com.encraft.dz.DayNMod;
+import com.encraft.dz.IFU;
 import com.google.common.base.Throwables;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -60,18 +60,15 @@ public abstract class AbstractMessage<T extends AbstractMessage<T>> implements I
         }
     }
 
-    // =====================================================================//
-    /*
-     * Make the implementation final so child classes don't need to bother with it, since the message class shouldn't
-     * have anything to do with the handler. This is simply to avoid having to have: public static class Handler extends
-     * GenericMessageHandler<OpenGuiMessage> {} in every single message class for the sole purpose of registration.
+    /**
+     * Final so each message class doubles as its own handler, avoiding a separate handler class per message.
      */
     @Override
     public final IMessage onMessage(T msg, MessageContext ctx) {
         if (!msg.isValidOnSide(ctx.side)) {
             throw new RuntimeException("Invalid side " + ctx.side.name() + " for " + msg.getClass().getSimpleName());
         }
-        msg.process(DayNMod.proxy.getPlayerEntity(ctx), ctx.side);
+        msg.process(IFU.proxy.getPlayerEntity(ctx), ctx.side);
         return null;
     }
 

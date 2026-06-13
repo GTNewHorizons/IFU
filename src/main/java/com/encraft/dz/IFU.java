@@ -9,38 +9,30 @@ import com.encraft.dz.items.*;
 import com.encraft.dz.lib.*;
 import com.encraft.dz.network.*;
 import com.encraft.dz.proxy.*;
-import com.encraft.network.*;
 
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.Mod.*;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.*;
-import cpw.mods.fml.common.network.simpleimpl.*;
-import cpw.mods.fml.relauncher.*;
 
-@Mod(modid = DayNMod.MOD_ID, name = "I Will Find You", version = Tags.MOD_VER)
-public class DayNMod {
+@Mod(modid = IFU.MOD_ID, name = "I Will Find You", version = Tags.MOD_VER)
+public class IFU {
 
     public static final String MOD_ID = "ifu";
 
     @Mod.Instance(MOD_ID)
-    public static DayNMod instance;
+    public static IFU instance;
 
     @SidedProxy(clientSide = "com.encraft.dz.proxy.ClientProxy", serverSide = "com.encraft.dz.proxy.CommonProxy")
     public static CommonProxy proxy;
 
-    public static SimpleNetworkWrapper snw;
-
     private static int modGuiIndex = 10;
-    public static final int GUI_CUSTOM_INV1 = modGuiIndex++;
+    public static final int GUI_ORE_FINDER = modGuiIndex++;
 
-    private static int modEntityIndex = 0;
-
-    public static CreativeTabs dnCVt = new CreativeTabs("DayNModTools") // tools tab
-    {
+    public static CreativeTabs creativeTab = new CreativeTabs("IFU") {
 
         public Item getTabIconItem() {
-            return DayNModItems.buildingKit;
+            return IFUItems.oreFinder;
         }
     };
 
@@ -51,20 +43,16 @@ public class DayNMod {
         ConfigHandler.init(configDir);
         FMLCommonHandler.instance().bus().register(new ConfigHandler());
 
-        DayNModItems.load();
+        IFUItems.load();
 
         PacketDispatcher.registerPackets();
-
-        snw = NetworkRegistry.INSTANCE.newSimpleChannel("DNMNetwork");
-        snw.registerMessage(MessageSetKeypadCode.MessageHandler.class, MessageSetKeypadCode.class, 2, Side.SERVER);
-        snw.registerMessage(MessageCheckKeypadCode.MessageHandler.class, MessageCheckKeypadCode.class, 3, Side.SERVER);
 
     }
 
     @EventHandler
     public void load(FMLInitializationEvent event) {
         proxy.registerRenderers();
-        MinecraftForge.EVENT_BUS.register(new DayNModEventHandler());
+        MinecraftForge.EVENT_BUS.register(new PlayerDataEventHandler());
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new CommonProxy());
 
     }

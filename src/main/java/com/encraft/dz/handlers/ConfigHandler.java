@@ -4,7 +4,7 @@ import java.io.File;
 
 import net.minecraftforge.common.config.Configuration;
 
-import com.encraft.dz.DayNMod;
+import com.encraft.dz.IFU;
 
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -13,18 +13,18 @@ public class ConfigHandler {
 
     public static Configuration cfg;
 
-    public static boolean updateCheck = true;
     public static boolean wandSound = true;
-    public static int xzAreaRadius = 4;
-    public static int yAreaRadius = 40;
-    public static String[] blacklist = {};
-    public static boolean aEnableEverywhere = false;
-
-    public static boolean dmgBar = true;
+    public static int xzAreaRadius = 5;
+    public static int yAreaRadius = 60;
+    public static String[] blocklist = {};
+    public static String[] materialBlocklist = {};
+    public static String[] allowlist = {};
+    public static boolean enableEverywhere = false;
+    public static boolean debugBlockInfo = false;
 
     public static void init(String configDir) {
         if (cfg == null) {
-            File path = new File(configDir + "/" + DayNMod.MOD_ID + ".cfg");
+            File path = new File(configDir + "/" + IFU.MOD_ID + ".cfg");
             cfg = new Configuration(path);
             loadConfiguration();
         }
@@ -34,30 +34,59 @@ public class ConfigHandler {
 
         xzAreaRadius = cfg.getInt(
                 "X Z Area radius",
-                cfg.CATEGORY_GENERAL,
+                Configuration.CATEGORY_GENERAL,
                 xzAreaRadius,
                 1,
                 16,
                 " change scanning radius from player");
         yAreaRadius = cfg.getInt(
                 "Y Area radius",
-                cfg.CATEGORY_GENERAL,
+                Configuration.CATEGORY_GENERAL,
                 yAreaRadius,
                 1,
                 60,
                 " change scanning distance above and below the player");
-        aEnableEverywhere = cfg.getBoolean(
+        enableEverywhere = cfg.getBoolean(
                 "Enable Everywhere",
-                cfg.CATEGORY_GENERAL,
+                Configuration.CATEGORY_GENERAL,
                 false,
                 "If this is set to false, the OreFinder will only work in the Owerworld, Nether and Twilight Forest");
-        wandSound = cfg.getBoolean("Sounds", cfg.CATEGORY_GENERAL, wandSound, "If true, Ore finder will play sounds");
+        wandSound = cfg.getBoolean(
+                "Sounds",
+                Configuration.CATEGORY_GENERAL,
+                wandSound,
+                "If true, Ore finder will play sounds");
 
-        blacklist = cfg.getStringList(
-                "Blacklist ",
-                cfg.CATEGORY_GENERAL,
-                blacklist,
-                "List blocks that can't be read by ore Finder. Use unlocalizedName.");
+        blocklist = cfg.getStringList(
+                "Blocklist",
+                Configuration.CATEGORY_GENERAL,
+                blocklist,
+                "Blocks the Ore Finder must never search for, that it would otherwise match on its own. "
+                        + "Use the block Item ID, same rules as Allowlist");
+
+        materialBlocklist = cfg.getStringList(
+                "Material Blocklist",
+                Configuration.CATEGORY_GENERAL,
+                materialBlocklist,
+                "Ore materials the Ore Finder must never search for. "
+                        + "Use the material name printed by the Debug block info option, for example: "
+                        + "\"Gold\" or \"MeteoricIron\".");
+
+        allowlist = cfg.getStringList(
+                "Allowlist",
+                Configuration.CATEGORY_GENERAL,
+                allowlist,
+                "Extra non-ore blocks allowed by Ore Finder. "
+                        + "Use the block Item ID with an optional metadata suffix: "
+                        + "\"minecraft:cobblestone\" matches any metadata, \"gregtech:gt.blockores2:307\" matches that specific one");
+
+        debugBlockInfo = cfg.getBoolean(
+                "Debug block info",
+                Configuration.CATEGORY_GENERAL,
+                false,
+                "If true, right-clicking a block with the Ore Finder prints: the block's name, metadata and ore material/flags, "
+                        + "plus the material internalName(s) the item inside the wand resolves to (can be used by Material Blocklist). "
+                        + "Useful for diagnosing ore matching and for finding what to put in an Allow/Block list");
 
         if (cfg.hasChanged()) {
 
@@ -68,13 +97,9 @@ public class ConfigHandler {
 
     @SubscribeEvent
     public void onConfigChangeEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (event.modID.equalsIgnoreCase(DayNMod.MOD_ID)) {
+        if (event.modID.equalsIgnoreCase(IFU.MOD_ID)) {
             loadConfiguration();
         }
-    }
-
-    public static Configuration getConfiguration() {
-        return cfg;
     }
 
 }
