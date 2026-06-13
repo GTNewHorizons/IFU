@@ -13,6 +13,7 @@ import com.encraft.dz.IFU;
 import com.encraft.dz.container.ContainerOreFinder;
 import com.encraft.dz.inventory.InventoryOreFinder;
 import com.encraft.dz.items.OreFinderSearch;
+import com.encraft.dz.util.ColorUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -40,20 +41,28 @@ public class GuiOreFinder extends GuiContainer {
 
         String title = StatCollector.translateToLocal(inventory.getInventoryName());
         int width = fontRendererObj.getStringWidth(title);
-        fontRendererObj.drawString(title, 88 - width / 2, 12, 4210752);
+        fontRendererObj.drawString(title, 88 - width / 2, 12, ColorUtils.title.getColor());
 
         if (target.isBlocklisted()) {
-            fontRendererObj.drawString(GTUtility.translate("IFU.BlocklistedBlock"), 27, ySize - 116, 4210752);
+            fontRendererObj.drawString(
+                    GTUtility.translate("IFU.BlocklistedBlock"),
+                    27,
+                    ySize - 116,
+                    ColorUtils.blocklistWarning.getColor());
         }
 
         int maxTextWidth = xSize - 10 - 8;
 
         String name = filterStack != null ? filterStack.getDisplayName() : StatCollector.translateToLocal("IFU.Empty");
-        fontRendererObj
-                .drawString(fit(GTUtility.translate("IFU.NameTip", name), maxTextWidth), 10, ySize - 106, 4210752);
+        fontRendererObj.drawString(
+                fit(GTUtility.translate("IFU.NameTip", name), maxTextWidth),
+                10,
+                ySize - 106,
+                ColorUtils.displayText.getColor());
 
         if (filterStack != null) {
-            int color = target.canSearch() ? 4210752 : 0xAA0000;
+            int color = target.canSearch() ? ColorUtils.searchAvailable.getColor()
+                    : ColorUtils.searchUnavailable.getColor();
             fontRendererObj.drawString(
                     fit(GTUtility.translate("IFU.SearchTip", target.getLocalizedName()), maxTextWidth),
                     10,
