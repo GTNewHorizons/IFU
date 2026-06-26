@@ -1,5 +1,6 @@
 package com.encraft.dz.items;
 
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
@@ -17,6 +18,7 @@ import gregtech.api.interfaces.IOreMaterial;
 import gregtech.api.util.GTUtility;
 import gregtech.common.ores.OreInfo;
 import gregtech.common.ores.OreManager;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 
 public final class OreFinderSearch {
@@ -99,7 +101,7 @@ public final class OreFinderSearch {
     static AreaScan scanArea(World world, int centerX, int centerY, int centerZ, MatchTarget target) {
         Block allowBlock = target.block;
         int allowMeta = target.meta;
-        ReferenceOpenHashSet<IOreMaterial> materials = target.materials;
+        Set<String> materialNames = target.materialNames;
 
         int minX = centerX - ConfigHandler.xzAreaRadius;
         int maxX = centerX + ConfigHandler.xzAreaRadius + 1;
@@ -129,7 +131,7 @@ public final class OreFinderSearch {
                             found++;
                         }
                     } else {
-                        IOreMaterial mat = matchedOre(block, chunk.getBlockMetadata(lx, y, lz), materials);
+                        IOreMaterial mat = matchedOre(block, chunk.getBlockMetadata(lx, y, lz), materialNames);
                         if (mat != null) {
                             found++;
                             oreMaterial = mat;
@@ -146,9 +148,11 @@ public final class OreFinderSearch {
         return new AreaScan(found, oreMaterial);
     }
 
-    private static IOreMaterial matchedOre(Block block, int meta, ReferenceOpenHashSet<IOreMaterial> materials) {
+    private static IOreMaterial matchedOre(Block block, int meta, Set<String> materialNames) {
         try (OreInfo<IOreMaterial> info = OreManager.getOreInfo(block, meta)) {
-            if (info != null && info.isNatural && !info.isSmall && materials.contains(info.material)) {
+            if (info != null && info.isNatural
+                    && !info.isSmall
+                    && materialNames.contains(info.material.getInternalName())) {
                 return info.material;
             }
         }
@@ -180,12 +184,22 @@ public final class OreFinderSearch {
         private final Block block;
         private final int meta;
         private final ReferenceOpenHashSet<IOreMaterial> materials;
+        private final ObjectOpenHashSet<String> materialNames;
 
         private MatchTarget(Kind kind, Block block, int meta, ReferenceOpenHashSet<IOreMaterial> materials) {
             this.kind = kind;
             this.block = block;
             this.meta = meta;
             this.materials = materials;
+
+            if (materials == null) {
+                this.materialNames = null;
+            } else {
+                this.materialNames = new ObjectOpenHashSet<>();
+                for (IOreMaterial material : materials) {
+                    this.materialNames.add(material.getInternalName());
+                }
+            }
         }
 
         private static MatchTarget block(Block block, int meta) {
