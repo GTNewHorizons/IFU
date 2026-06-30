@@ -15,6 +15,7 @@ public class ConfigHandler {
 
     public static boolean wandSound = true;
     public static int xzAreaRadius = 5;
+    public static int oreVeinDiscoveryRange = 24;
     public static int yAreaRadius = 60;
     public static String[] blocklist = {};
     public static String[] materialBlocklist = {};
@@ -39,6 +40,13 @@ public class ConfigHandler {
                 1,
                 16,
                 " change scanning radius from player");
+        oreVeinDiscoveryRange = cfg.getInt(
+                "Ore vein discovery range",
+                Configuration.CATEGORY_GENERAL,
+                oreVeinDiscoveryRange,
+                xzAreaRadius,
+                64,
+                "Block radius (square, centered on the player) for revealing ore veins of the type just found. ");
         yAreaRadius = cfg.getInt(
                 "Y Area radius",
                 Configuration.CATEGORY_GENERAL,
