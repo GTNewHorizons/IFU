@@ -17,7 +17,6 @@ import com.encraft.dz.util.ColorUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import gregtech.api.util.GTUtility;
 
 @SideOnly(Side.CLIENT)
 public class GuiOreFinder extends GuiContainer {
@@ -45,7 +44,7 @@ public class GuiOreFinder extends GuiContainer {
 
         if (target.isBlocklisted()) {
             fontRendererObj.drawString(
-                    GTUtility.translate("IFU.BlocklistedBlock"),
+                    StatCollector.translateToLocal("IFU.BlocklistedBlock"),
                     27,
                     ySize - 116,
                     ColorUtils.blocklistWarning.getColor());
@@ -55,7 +54,7 @@ public class GuiOreFinder extends GuiContainer {
 
         String name = filterStack != null ? filterStack.getDisplayName() : StatCollector.translateToLocal("IFU.Empty");
         fontRendererObj.drawString(
-                fit(GTUtility.translate("IFU.NameTip", name), maxTextWidth),
+                fit(StatCollector.translateToLocalFormatted("IFU.NameTip", name), maxTextWidth),
                 10,
                 ySize - 106,
                 ColorUtils.displayText.getColor());
@@ -64,7 +63,9 @@ public class GuiOreFinder extends GuiContainer {
             int color = target.canSearch() ? ColorUtils.searchAvailable.getColor()
                     : ColorUtils.searchUnavailable.getColor();
             fontRendererObj.drawString(
-                    fit(GTUtility.translate("IFU.SearchTip", target.getLocalizedName()), maxTextWidth),
+                    fit(
+                            StatCollector.translateToLocalFormatted("IFU.SearchTip", target.getLocalizedName()),
+                            maxTextWidth),
                     10,
                     ySize - 96,
                     color);

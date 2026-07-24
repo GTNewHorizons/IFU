@@ -16,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import com.encraft.dz.IFU;
@@ -171,17 +172,21 @@ public class ItemOreFinderTool extends Item {
         ItemStack filterStack = OreFinderPlayerData.get(player).filterInventory.getStackInSlot(0);
 
         if (filterStack != null) {
-            list.add(GTUtility.translate("IFU.FindTarget", filterStack.getDisplayName()));
+            list.add(StatCollector.translateToLocalFormatted("IFU.FindTarget", filterStack.getDisplayName()));
         }
 
-        list.add(GTUtility.translate("IFU.description1"));
-        list.add(GTUtility.translate("IFU.description2"));
-        list.add(GTUtility.translate("IFU.description3"));
-        list.add(GTUtility.translate("IFU.SearchRadiusText", ConfigHandler.xzAreaRadius, ConfigHandler.yAreaRadius));
+        list.add(StatCollector.translateToLocal("IFU.description1"));
+        list.add(StatCollector.translateToLocal("IFU.description2"));
+        list.add(StatCollector.translateToLocal("IFU.description3"));
+        list.add(
+                StatCollector.translateToLocalFormatted(
+                        "IFU.SearchRadiusText",
+                        ConfigHandler.xzAreaRadius,
+                        ConfigHandler.yAreaRadius));
 
         if (!ConfigHandler.enableEverywhere) {
-            list.add(GTUtility.translate("IFU.disableAtSomewhereWarning1"));
-            list.add(GTUtility.translate("IFU.disableAtSomewhereWarning2"));
+            list.add(StatCollector.translateToLocal("IFU.disableAtSomewhereWarning1"));
+            list.add(StatCollector.translateToLocal("IFU.disableAtSomewhereWarning2"));
         }
     }
 
