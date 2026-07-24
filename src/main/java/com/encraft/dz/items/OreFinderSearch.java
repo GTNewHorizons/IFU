@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -15,7 +16,6 @@ import com.github.bsideup.jabel.Desugar;
 
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IOreMaterial;
-import gregtech.api.util.GTUtility;
 import gregtech.common.ores.OreInfo;
 import gregtech.common.ores.OreManager;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -223,7 +223,7 @@ public final class OreFinderSearch {
                 case BLOCK -> new ItemStack(block, 1, meta == ANY_META ? 0 : meta).getDisplayName();
                 case MATERIALS -> materials.stream().map(IOreMaterial::getLocalizedName)
                         .collect(Collectors.joining(", "));
-                default -> GTUtility.translate("IFU.SearchNoMatch");
+                default -> StatCollector.translateToLocal("IFU.SearchNoMatch");
             };
         }
 
