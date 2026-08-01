@@ -23,12 +23,12 @@ import com.encraft.dz.IFU;
 import com.encraft.dz.OreFinderPlayerData;
 import com.encraft.dz.handlers.ConfigHandler;
 import com.encraft.dz.items.OreFinderSearch.MatchTarget;
+import com.ruling_0.materiallib.api.Material;
 import com.sinthoras.visualprospecting.VisualProspecting_API;
 import com.sinthoras.visualprospecting.database.OreVeinPosition;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import gregtech.api.interfaces.IOreMaterial;
 import gregtech.api.util.GTUtility;
 import gregtech.common.ores.OreInfo;
 import gregtech.common.ores.OreManager;
@@ -158,7 +158,7 @@ public class ItemOreFinderTool extends Item {
         }
     }
 
-    private void prospectForVeins(World world, EntityPlayerMP player, int x1, int z1, IOreMaterial ore) {
+    private void prospectForVeins(World world, EntityPlayerMP player, int x1, int z1, Material ore) {
         List<OreVeinPosition> veins = VisualProspecting_API.LogicalServer
                 .prospectOreVeinsWithinRadius(world.provider.dimensionId, x1, z1, ConfigHandler.oreVeinDiscoveryRange)
                 .stream().filter(it -> it.veinType.containsOre(ore)).collect(Collectors.toList());
@@ -221,14 +221,14 @@ public class ItemOreFinderTool extends Item {
                                 Block.blockRegistry.getNameForObject(block),
                                 meta)));
 
-        try (OreInfo<IOreMaterial> info = OreManager.getOreInfo(world, x, y, z)) {
+        try (OreInfo info = OreManager.getOreInfo(world, x, y, z)) {
             if (info != null) {
                 GTUtility.sendChatComp(
                         player,
                         new ChatComponentText(
                                 String.format(
                                         "[OreFinder] Ore material: %s (stone=%s, natural=%s, small=%s)",
-                                        info.material.getInternalName(),
+                                        info.material.getName(),
                                         info.stoneType,
                                         info.isNatural,
                                         info.isSmall)));

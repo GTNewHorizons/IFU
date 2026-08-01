@@ -13,9 +13,10 @@ import net.minecraft.world.chunk.Chunk;
 
 import com.encraft.dz.handlers.ConfigHandler;
 import com.github.bsideup.jabel.Desugar;
+import com.ruling_0.materiallib.api.Material;
+import com.ruling_0.materiallib.api.MaterialLibAPI;
 
 import gregtech.api.enums.OrePrefixes;
-import gregtech.api.interfaces.IOreMaterial;
 import gregtech.common.ores.OreInfo;
 import gregtech.common.ores.OreManager;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -52,9 +53,9 @@ public final class OreFinderSearch {
         }
 
         // Resolve the ore material(s) the filter stands for, dropping any the material block-list forbids.
-        ReferenceOpenHashSet<IOreMaterial> materials = new ReferenceOpenHashSet<>();
+        ReferenceOpenHashSet<Material> materials = new ReferenceOpenHashSet<>();
         boolean resolved = false;
-        IOreMaterial searchMaterial = OreManager.getMaterial(searchItem);
+        Material searchMaterial = OreManager.getMaterial(searchItem);
         if (searchMaterial != null) {
             resolved = true;
             if (!isMaterialBlocked(searchMaterial)) {
@@ -62,7 +63,7 @@ public final class OreFinderSearch {
             }
         } else {
             for (var oredict : OrePrefixes.detectPrefix(searchItem)) {
-                IOreMaterial mat = IOreMaterial.findMaterial(oredict.material);
+                Material mat = MaterialLibAPI.getMaterial("gregtech", oredict.material);
                 if (mat != null) {
                     resolved = true;
                     if (!isMaterialBlocked(mat)) {
@@ -83,8 +84,8 @@ public final class OreFinderSearch {
         return target.canSearch() || target.isBlocklisted();
     }
 
-    private static boolean isMaterialBlocked(IOreMaterial material) {
-        String internalName = material.getInternalName();
+    private static boolean isMaterialBlocked(Material material) {
+        String internalName = material.getName();
 
         for (String entry : ConfigHandler.materialBlocklist) {
             if (entry != null && entry.trim().equalsIgnoreCase(internalName)) {
@@ -111,7 +112,7 @@ public final class OreFinderSearch {
         int maxZ = centerZ + ConfigHandler.xzAreaRadius + 1;
 
         int found = 0;
-        IOreMaterial oreMaterial = null;
+        Material oreMaterial = null;
 
         for (int z = minZ; z < maxZ; z++) {
             for (int x = minX; x < maxX; x++) {
@@ -131,7 +132,7 @@ public final class OreFinderSearch {
                             found++;
                         }
                     } else {
-                        IOreMaterial mat = matchedOre(block, chunk.getBlockMetadata(lx, y, lz), materialNames);
+                        Material mat = matchedOre(block, chunk.getBlockMetadata(lx, y, lz), materialNames);
                         if (mat != null) {
                             found++;
                             oreMaterial = mat;
@@ -148,11 +149,9 @@ public final class OreFinderSearch {
         return new AreaScan(found, oreMaterial);
     }
 
-    private static IOreMaterial matchedOre(Block block, int meta, Set<String> materialNames) {
-        try (OreInfo<IOreMaterial> info = OreManager.getOreInfo(block, meta)) {
-            if (info != null && info.isNatural
-                    && !info.isSmall
-                    && materialNames.contains(info.material.getInternalName())) {
+    private static Material matchedOre(Block block, int meta, Set<String> materialNames) {
+        try (OreInfo info = OreManager.getOreInfo(block, meta)) {
+            if (info != null && info.isNatural && !info.isSmall && materialNames.contains(info.material.getName())) {
                 return info.material;
             }
         }
@@ -160,7 +159,7 @@ public final class OreFinderSearch {
     }
 
     @Desugar
-    record AreaScan(int found, IOreMaterial oreMaterial) {
+    record AreaScan(int found, Material oreMaterial) {
 
     }
 
@@ -183,10 +182,10 @@ public final class OreFinderSearch {
         private final Kind kind;
         private final Block block;
         private final int meta;
-        private final ReferenceOpenHashSet<IOreMaterial> materials;
+        private final ReferenceOpenHashSet<Material> materials;
         private final ObjectOpenHashSet<String> materialNames;
 
-        private MatchTarget(Kind kind, Block block, int meta, ReferenceOpenHashSet<IOreMaterial> materials) {
+        private MatchTarget(Kind kind, Block block, int meta, ReferenceOpenHashSet<Material> materials) {
             this.kind = kind;
             this.block = block;
             this.meta = meta;
@@ -196,8 +195,8 @@ public final class OreFinderSearch {
                 this.materialNames = null;
             } else {
                 this.materialNames = new ObjectOpenHashSet<>();
-                for (IOreMaterial material : materials) {
-                    this.materialNames.add(material.getInternalName());
+                for (Material material : materials) {
+                    this.materialNames.add(material.getName());
                 }
             }
         }
@@ -206,7 +205,7 @@ public final class OreFinderSearch {
             return new MatchTarget(Kind.BLOCK, block, meta, null);
         }
 
-        private static MatchTarget materials(ReferenceOpenHashSet<IOreMaterial> materials) {
+        private static MatchTarget materials(ReferenceOpenHashSet<Material> materials) {
             return new MatchTarget(Kind.MATERIALS, null, ANY_META, materials);
         }
 
@@ -221,8 +220,7 @@ public final class OreFinderSearch {
         public String getLocalizedName() {
             return switch (kind) {
                 case BLOCK -> new ItemStack(block, 1, meta == ANY_META ? 0 : meta).getDisplayName();
-                case MATERIALS -> materials.stream().map(IOreMaterial::getLocalizedName)
-                        .collect(Collectors.joining(", "));
+                case MATERIALS -> materials.stream().map(Material::getLocalizedName).collect(Collectors.joining(", "));
                 default -> StatCollector.translateToLocal("IFU.SearchNoMatch");
             };
         }
@@ -230,8 +228,7 @@ public final class OreFinderSearch {
         public String getInternalName() {
             return switch (kind) {
                 case BLOCK -> Block.blockRegistry.getNameForObject(block) + (meta == ANY_META ? "" : ":" + meta);
-                case MATERIALS -> materials.stream().map(IOreMaterial::getInternalName)
-                        .collect(Collectors.joining(", "));
+                case MATERIALS -> materials.stream().map(Material::getName).collect(Collectors.joining(", "));
                 case BLOCKLISTED -> "block-listed";
                 case NONE -> "no match";
             };
