@@ -5,6 +5,7 @@ import java.io.File;
 import net.minecraftforge.common.config.Configuration;
 
 import com.encraft.dz.IFU;
+import com.encraft.dz.items.MlEntryResolver;
 
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -70,7 +71,7 @@ public class ConfigHandler {
                 Configuration.CATEGORY_GENERAL,
                 blocklist,
                 "Blocks the Ore Finder must never search for, that it would otherwise match on its own. "
-                        + "Use the block Item ID, same rules as Allowlist");
+                        + "Use the block Item ID or a MaterialLib \"ml:\" entry, same rules as Allowlist");
 
         materialBlocklist = cfg.getStringList(
                 "Material Blocklist",
@@ -86,7 +87,9 @@ public class ConfigHandler {
                 allowlist,
                 "Extra non-ore blocks allowed by Ore Finder. "
                         + "Use the block Item ID with an optional metadata suffix: "
-                        + "\"minecraft:cobblestone\" matches any metadata, \"gregtech:gt.blockores2:307\" matches that specific one");
+                        + "\"minecraft:cobblestone\" matches any metadata, \"gregtech:gt.blockores2:307\" matches that specific one. "
+                        + "MaterialLib blocks are named \"ml:<material>:<shape>\" instead, since their metadata changes between sessions: "
+                        + "\"ml:Iron:ore\" matches every ore variant, \"ml:Iron:ore_stone\" matches that one variant");
 
         debugBlockInfo = cfg.getBoolean(
                 "Debug block info",
@@ -95,6 +98,8 @@ public class ConfigHandler {
                 "If true, right-clicking a block with the Ore Finder prints: the block's name, metadata and ore material/flags, "
                         + "plus the material internalName(s) the item inside the wand resolves to (can be used by Material Blocklist). "
                         + "Useful for diagnosing ore matching and for finding what to put in an Allow/Block list");
+
+        MlEntryResolver.invalidate();
 
         if (cfg.hasChanged()) {
 

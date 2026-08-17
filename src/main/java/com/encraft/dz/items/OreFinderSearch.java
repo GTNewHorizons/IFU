@@ -256,6 +256,15 @@ public final class OreFinderSearch {
                 continue;
             }
 
+            if (entry.startsWith(MlEntryResolver.PREFIX)) {
+                for (MlEntryResolver.BlockMeta pair : MlEntryResolver.expand(entry)) {
+                    if (pair.block() == block && pair.meta() == meta) {
+                        return pair.meta();
+                    }
+                }
+                continue;
+            }
+
             String name = entry;
             int entryMeta = ANY_META;
 
