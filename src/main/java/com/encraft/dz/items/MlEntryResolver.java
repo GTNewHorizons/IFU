@@ -18,7 +18,7 @@ import com.ruling_0.materiallib.api.StackResolver;
 
 /// Expands the `ml:<material>:<shapeToken>` entries of the Ore Finder allow-list and block-list into the blocks and
 /// metadata they name. A MaterialLib block carries the material's global index as its metadata, and that index is
-/// assigned per session, so such a block has no fixed number to name it with the way a `modid:block:meta` entry does.
+/// assigned per session, so no fixed `modid:block:meta` entry can name one.
 ///
 /// Expansions are cached per entry until [#invalidate].
 public final class MlEntryResolver {
@@ -38,20 +38,19 @@ public final class MlEntryResolver {
 
     }
 
-    /// The blocks and metadata `entry` names. A shape token naming one block shape yields a single pair; a family
+    /// The blocks and metadata `entry` names. A shape token naming one block shape yields a single pair. A family
     /// token such as `ore` yields one pair per `ore_*` variant. Empty when the entry names no block shape that the
     /// material generates.
     public static List<BlockMeta> expand(String entry) {
         return EXPANSIONS.computeIfAbsent(entry, MlEntryResolver::resolve);
     }
 
-    /// Drops the cached expansions so the next lookup reads the current config entries.
+    /// Drops the cached expansions.
     public static void invalidate() {
         EXPANSIONS.clear();
     }
 
-    /// Expands every `ml:` entry of the given lists and reports how many resolved. Call once MaterialLib has resolved
-    /// its shapes.
+    /// Expands every `ml:` entry of the given lists. Call once MaterialLib has resolved its shapes.
     public static void warmUp(String[]... lists) {
         int resolved = 0;
         int invalid = 0;
@@ -95,9 +94,7 @@ public final class MlEntryResolver {
         List<ShapeBlock> shapes = StackResolver.getBlockShapes(parts[2]);
         if (shapes.isEmpty()) {
             if (StackResolver.getShape(parts[2]) != null) {
-                LOG.error(
-                        "MaterialLib list entry \"{}\" names an item shape, and the Ore Finder searches blocks",
-                        entry);
+                LOG.error("MaterialLib list entry \"{}\" names an item shape, not a block shape", entry);
             }
             return Collections.emptyList();
         }

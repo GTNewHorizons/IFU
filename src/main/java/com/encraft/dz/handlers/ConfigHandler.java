@@ -88,7 +88,7 @@ public class ConfigHandler {
                 "Extra non-ore blocks allowed by Ore Finder. "
                         + "Use the block Item ID with an optional metadata suffix: "
                         + "\"minecraft:cobblestone\" matches any metadata, \"gregtech:gt.blockores2:307\" matches that specific one. "
-                        + "MaterialLib blocks are named \"ml:<material>:<shape>\" instead, since their metadata changes between sessions: "
+                        + "MaterialLib blocks are named \"ml:<material>:<shape>\" instead: "
                         + "\"ml:Iron:ore\" matches every ore variant, \"ml:Iron:ore_stone\" matches that one variant");
 
         debugBlockInfo = cfg.getBoolean(
