@@ -16,14 +16,14 @@ import com.ruling_0.materiallib.api.Material;
 import com.ruling_0.materiallib.api.ShapeBlock;
 import com.ruling_0.materiallib.api.StackResolver;
 
-/// Expands the `ml:<material>:<shapeToken>` entries of the Ore Finder allow-list and block-list into the blocks and
-/// metadata they name. A MaterialLib block carries the material's global index as its metadata, and that index is
-/// assigned per session, so no fixed `modid:block:meta` entry can name one.
+/// Expands the `ml:<material>:<shape>` entries of the Ore Finder allow-list and block-list into the blocks and
+/// metadata they name. A MaterialLib block carries the material's session-assigned global index as its metadata, so
+/// no fixed `modid:block:meta` entry can name one.
 ///
 /// Expansions are cached per entry until [#invalidate].
 public final class MlEntryResolver {
 
-    /// Marks a config entry as a MaterialLib material and shape pair rather than a block name.
+    /// Prefix of a config entry that names a MaterialLib material and shape.
     public static final String PREFIX = "ml:";
 
     private static final Logger LOG = LogManager.getLogger("IFU");
@@ -75,7 +75,7 @@ public final class MlEntryResolver {
         }
 
         if (resolved + invalid > 0) {
-            LOG.info("IFU: resolved {} MaterialLib list entries ({} invalid)", resolved, invalid);
+            LOG.info("Resolved {} MaterialLib list entries ({} invalid)", resolved, invalid);
         }
     }
 
