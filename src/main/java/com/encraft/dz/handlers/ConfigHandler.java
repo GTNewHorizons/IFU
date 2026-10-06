@@ -87,7 +87,7 @@ public class ConfigHandler {
                 allowlist,
                 "Extra non-ore blocks allowed by Ore Finder. "
                         + "Use the block Item ID with an optional metadata suffix: "
-                        + "\"minecraft:cobblestone\" matches any metadata, \"gregtech:gt.blockores2:307\" matches that specific one. "
+                        + "\"minecraft:cobblestone\" matches any metadata, \"minecraft:stone:1\" matches that specific one. "
                         + "MaterialLib blocks are named \"ml:<material>:<shape>\" instead: "
                         + "\"ml:Iron:ore\" matches every ore variant, \"ml:Iron:ore_stone\" matches that one variant");
 
