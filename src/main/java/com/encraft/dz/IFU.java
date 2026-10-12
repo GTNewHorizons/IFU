@@ -60,6 +60,7 @@ public class IFU {
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         new Recipes().run();
+        MlEntryResolver.warmUp(ConfigHandler.allowlist, ConfigHandler.blocklist);
     }
 
 }
